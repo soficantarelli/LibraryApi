@@ -327,7 +327,7 @@ module.exports = {
     },
 
     deleteLoan: async (req, res) => {
-        if (req.session.loggedIn && req.session.rol == 'P') {
+        if (req.session.loggedIn && req.session.rol == 'L') {
             
             var result = await query.deleteLoan(req.params.id);
             
