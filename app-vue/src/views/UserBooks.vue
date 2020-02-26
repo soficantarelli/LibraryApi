@@ -36,28 +36,36 @@
 export default {
     data: () => ({
     headers: [
-      {
-        text: "Book",value: "book"
-      },
-       {
-        text: "Amount",value: "amount"
-      }
+      { text: "Title", value: "title" },
+      { text: "Author", value: "author" },
+      { text: "Amount", value: "amount" }
     ],
     books: [],
   }),
 
-  created() {
-    this.initialize();
+  ccreated() {
+    this.getAllBooks();
   },
 
   methods: {
-    initialize() {
-      this.books = [
-        {
-          book: "Frozen Yogurt",
-          amount: "1"
-        }
-      ];
+    getAllBooks() {
+      this.$axios
+        .get("http://localhost:8080/books")
+        .then(response => {
+          if (response.status == 200) {
+            if (response.data.length == 0) {
+              this.books = "No books availables";
+            } else {
+              this.books = response.data;
+            }
+          }
+        })
+        .catch(error => {
+          if (error.response.status == 400) {
+            this.$store.commit("logout");
+            this.message = "Session expired".then(() => this.$router.push("/"));
+          }
+        });
     }
   }
 }

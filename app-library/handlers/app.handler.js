@@ -95,7 +95,7 @@ module.exports = {
                 });
 
             }else {
-                res.status(400).json("The user has no loans or not exist");
+                res.status(401).json("The user has no loans or not exist");
             }
 
         } else {
@@ -162,10 +162,10 @@ module.exports = {
                     });
 
                 }else {
-                    res.status(400).json("Existing book");
+                    res.status(401).json("Existing book");
                 }
             }else {
-                res.status(400).json("Wrong parameters");
+                res.status(401).json("Wrong parameters");
             }
 
         } else {
@@ -197,11 +197,11 @@ module.exports = {
                             });
     
                         } else {
-                            res.status(400).json("Amount could not be modified");
+                            res.status(401).json("Amount could not be modified");
                         }
     
                     }else {
-                        res.status(400).json("Wrong parameters");
+                        res.status(401).json("Wrong parameters");
                     }
 
                 }else{
@@ -214,11 +214,11 @@ module.exports = {
                             });
     
                         } else {
-                            res.status(400).json("Amount could not be modified");
+                            res.status(401).json("Amount could not be modified");
                         }
     
                     }else {
-                        res.status(400).json("Wrong parameters");
+                        res.status(401).json("Wrong parameters");
                     }
                 }      
 
@@ -247,7 +247,7 @@ module.exports = {
                     });
 
                 } else{
-                    res.status(400).json("Book couldn't be removed");
+                    res.status(401).json("Book couldn't be removed");
                 }
 
             }else {
@@ -302,19 +302,19 @@ module.exports = {
                                     message: "Loan successfully created"
                                 });
                             }else {
-                                res.status(400).json("Loan could not be created");
+                                res.status(401).json("Loan could not be created");
                             }
                             
                         }else{
-                            res.status(400).json("Wrong number");   
+                            res.status(401).json("Wrong number");   
                         }
 
                     }else {
-                        res.status(400).json("Number of copies not available");
+                        res.status(401).json("Number of copies not available");
                     }
 
                 } else {
-                    res.status(400).json("Past due loans");
+                    res.status(401).json("Past due loans");
                 }
 
             }else{
