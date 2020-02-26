@@ -43,16 +43,28 @@ export default {
   }),
 
   created() {
-    this.initialize();
+    this.getAllPartners();
   },
 
   methods: {
-    initialize() {
-      this.partners = [
-        {
-          partners: "Frozen Yogurt",
-        }
-      ];
+    getAllPartners() {
+      this.$axios
+        .get("http://localhost:8080/partners")
+        .then(response => {
+          if (response.status == 200) {
+            if (response.data.length == 0) {
+              this.partners = "No partners availables";
+            } else {
+              this.partners = response.data;
+            }
+          }
+        })
+        .catch(error => {
+          if (error.response.status == 400) {
+            this.$store.commit("logout");
+            this.message = "Session expired".then(() => this.$router.push("/"));
+          }
+        });
     }
   }
 }

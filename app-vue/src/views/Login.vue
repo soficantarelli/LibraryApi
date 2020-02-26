@@ -60,7 +60,8 @@
 
 <script>
   export default {
-	  name: "login",
+    name: "login",
+    messsage:"",
     data: () => ({
     username: "",
     password: "",
@@ -94,10 +95,9 @@
     
 		.catch(error => {
 					if (error.response && error.response.status == 404) {
-            this.mes = "The e-mail and / or password are incorrect";
+            this.messsage = "The e-mail and / or password are incorrect";
           } else if ((error.response && error.response.status == 500)) {
-            this.mes =
-              "There was an error, please try again in a moment";
+            this.messsage = "There was an error, please try again in a moment";
           }
 
 				});

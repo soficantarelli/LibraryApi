@@ -37,6 +37,8 @@
 <script>
 export default {
     data: () => ({
+    idUser: this.$store.state.idUser,
+    message:"",
     headers: [
       {
         text: "Book",value: "book"
@@ -47,17 +49,27 @@ export default {
   }),
 
   created() {
-    this.initialize();
+    this.getPartnerIdLoan(idUser);
   },
 
   methods: {
-    initialize() {
-      this.loans = [
-        {
-          book: "Frozen Yogurt",
-          expired: 159,
-        }
-      ];
+    getPartnerIdLoan(idUser){
+      this.$axios
+      .get("http://localhost:8080/partners/loans" + idUser)
+      .then(response => {
+         if (response.status == 200) {
+              this.loans = response.data;
+          }
+      })
+      .catch(error => {
+        if (error.response.status == 400) {
+            this.$store.commit("logout");
+            this.message = "Session expired".then(() => this.$router.push("/"));
+          }
+          else if(error.response.status == 401){
+              this.message="The user has no loans or not exist"
+          }
+      })
     }
   }
 }

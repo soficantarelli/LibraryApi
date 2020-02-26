@@ -46,8 +46,8 @@ export default {
     data: () => ({
     dialog: false,
     headers: [
-      {text: "Book",value: "book"},
       { text: "Partner", value: "partner" },
+      {text: "Book",value: "book"},
       { text: "Expired Date", value: "expired" },
       { text: "Actions", value: "action"}
     ],
@@ -61,36 +61,54 @@ export default {
   },
 
   created() {
-    this.initialize();
+    this.getAllLoans();
   },
 
   methods: {
-    initialize() {
-      this.loans = [
-      ];
+    getAllLoans() {
+      this.$axios
+        .get("http://localhost:8080/loans")
+        .then(response => {
+          if (response.status == 200) {
+              this.loans = response.data;
+          }
+        })
+        .catch(error => {
+          if (error.response.status == 400) {
+            this.$store.commit("logout");
+            this.message = "Session expired".then(() => this.$router.push("/"));
+          }
+          else if(error.response.status == 404){
+              this.message="Loans not found"
+          }
+        });
+    },
+
+    deleteLoan(idLoan){
+      this.$axios
+        .delete("http://localhost:8080/loans/" + idLoan)
+        .then(response => {
+          if (response.status == 200) {
+            this.message = "Loan successfully removed"
+            this.getAllBooks();
+          }
+          
+        })
+        .catch(error => {
+          if (error.response.status == 400) {
+            this.$store.commit("logout");
+            this.message = "Session expired"
+            .then(() => this.$router.push("/"));
+          } else if (error.response.status == 404) {
+            this.message = "Loan not found"
+            .then(() => this.$router.push("/loans"));
+          }
+        });
     },
 
     deleteItem(item) {
-      const index = this.books.indexOf(item);
       confirm("Are you sure you want to delete this item?") &&
-        this.books.splice(index, 1);
-    },
-
-    close() {
-      this.dialog = false;
-      setTimeout(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      }, 300);
-    },
-
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.books[this.editedIndex], this.editedItem);
-      } else {
-        this.books.push(this.editedItem);
-      }
-      this.close();
+        this.deleteLoan(item.idLoan);
     }
   }
 }

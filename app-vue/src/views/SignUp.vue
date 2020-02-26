@@ -80,22 +80,18 @@
 		e.preventDefault();
       	this.axios
         	.post("http://localhost:8000/singup", {
-			name: this.name,
+			      name: this.name,
           	username: this.username,
           	password: this.password
         })
-        .then(response => {
-				
-					//if (res.status == 200) {
+        .then(response => {				
+					if (res.status == 200) {
 						this.$router.push("/login");
-					//} else {
-						//console.log(res);
-					//}
+					} 
 
 		})
 		.catch(error => {
 					console.log(e.message);
-
 				});
   	}
   }
