@@ -35,7 +35,7 @@ app.use(bodyParser.json({ type: 'applicationlication/json' }));
 
 require("./routes/app.routes")(app);
 
-var server = app.listen(8080, '127.0.0.1', function () {
+var server = app.listen(8080, '0.0.0.0', function () {
     var host = server.address().address;
     var port = server.address().port;
     console.log("App listening at http://%s:%s", host, port);
