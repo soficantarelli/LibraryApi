@@ -10,7 +10,7 @@
           <v-spacer></v-spacer>
           <h1 class="black--text text-center font-weight-bold"> Welcome to the virtual library</h1>
         <v-spacer></v-spacer>
-        <v-btn depressed rounded color="blue" to="/singup">Sing up</v-btn>
+        <v-btn depressed rounded color="blue" to="/singup">Sign up</v-btn>
         <v-btn depressed rounded color="dark green" to="/login">Login</v-btn>
          </v-toolbar>  
       </div>

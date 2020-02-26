@@ -9,7 +9,7 @@
           <v-col cols="12" sm="8" md="4">
             <v-card class="elevation-12">
               <v-toolbar color="dark blue" dark flat>
-                <v-toolbar-title>Sing Up</v-toolbar-title>
+                <v-toolbar-title>Sign Up</v-toolbar-title>
               </v-toolbar>
 
               <v-card-text>
@@ -19,7 +19,7 @@
                     name="name"
                     prepend-icon="person"
                     v-model="text"
-					:rules="[v => !!v || 'Debe ingresar su nombre']"
+					:rules="[v => !!v || 'You must enter your name']"
 					required
                   />
 
@@ -28,7 +28,7 @@
                     name="username"
                     prepend-icon="person"
                     v-model="text"
-					:rules="[v => !!v || 'Debe ingresar su usuario']"
+					:rules="[v => !!v || 'You must enter your username']"
 					required
                   />
 
@@ -40,7 +40,7 @@
                  
                   v-model="password"
                   required
-                  :rules="[v => !!v || 'Debe ingresar su contraseña']"
+                  :rules="[v => !!v || 'You must enter your password']"
                   />
 				  <v-spacer />
 
@@ -50,7 +50,7 @@
                       type="submit"
 					  :disabled="!valid"
                       block
-                    >Ingresar</v-btn>
+                    >Sign Up</v-btn>
 
                 </v-form>
               </v-card-text>

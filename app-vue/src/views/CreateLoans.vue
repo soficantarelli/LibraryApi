@@ -28,7 +28,7 @@
                   name="days"
                   v-model="number"
                   required
-                  :rules="[v => v > 0 && v < 11 || 'De 1 a 10 días duran los prestamos']"
+                  :rules="[v => v > 0 && v < 11 || '1 to 10 days last the loans']"
                   />
 				  <v-spacer />
 
@@ -46,7 +46,7 @@
                       type="submit"
                       block
                      to='/homeuser'
-                    >Cancelar</v-btn>
+                    >Cancel</v-btn>
 
                 </v-form>
               </v-card-text>

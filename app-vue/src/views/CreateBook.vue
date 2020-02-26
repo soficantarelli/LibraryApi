@@ -19,14 +19,14 @@
                     label="Title"
                     name="title"
                     v-model="text"
-					:rules="[v => !!v || 'Debe ingresar su usuario']"
+					:rules="[v => !!v || 'You must enter the title']"
 					required
                   />
                   <v-text-field
-                    label="Auth"
-                    name="Auth"
+                    label="Author"
+                    name="Author"
                     v-model="text"
-					:rules="[v => !!v || 'Debe ingresar su usuario']"
+					:rules="[v => !!v || 'You must enter the author']"
 					required
                   />
 
@@ -35,7 +35,7 @@
                   name="amount"
                   v-model="number"
                   required
-                  :rules="[v => v > 0]"
+                  :rules="[v => v > 0 || 'The amount must be greater than 0']"
                   />
 				  <v-spacer />
 
@@ -53,7 +53,7 @@
                       type="submit"
                       block
                      to='/books'
-                    >Cancelar</v-btn>
+                    >Cancel</v-btn>
 
                 </v-form>
               </v-card-text>

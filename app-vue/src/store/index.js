@@ -10,8 +10,6 @@ export default new Vuex.Store({
         userId: null,
         username: null,
         role: null
-        //,
-        // bookId: null,
     },
     plugins: [createPersistedState()],
     mutations: {
@@ -27,9 +25,5 @@ export default new Vuex.Store({
             state.username = null;
             state.role = null;
         }
-        //,
-        // newloan (state,book) {
-        //     state.bookId = book.bookId;
-        // }
     }
 })

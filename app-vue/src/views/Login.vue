@@ -19,7 +19,7 @@
                     name="username"
                     prepend-icon="person"
                     v-model="text"
-					:rules="[v => !!v || 'Debe ingresar su usuario']"
+					:rules="[v => !!v || 'You must enter your user']"
 					required
                   />
 
@@ -31,7 +31,7 @@
                  
                   v-model="password"
                   required
-                  :rules="[v => !!v || 'Debe ingresar su contraseña']"
+                  :rules="[v => !!v || 'You must enter your password']"
 
                   />
 				  <v-spacer />
@@ -43,7 +43,7 @@
                       type="submit"
                       :disabled="!valid"
                       block
-                    >Ingresar</v-btn>
+                    >Login</v-btn>
 
                 </v-form>
               </v-card-text>
@@ -94,10 +94,10 @@
     
 		.catch(error => {
 					if (error.response && error.response.status == 404) {
-            this.mes = "El e-mail y/o la contraseña son incorrectos";
+            this.mes = "The e-mail and / or password are incorrect";
           } else if ((error.response && error.response.status == 500)) {
             this.mes =
-              "Hubo un error, por favor vuelva a intentar en un momento.";
+              "There was an error, please try again in a moment";
           }
 
 				});

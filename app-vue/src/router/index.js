@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
-import SingUp from '../views/SingUp.vue'
+import SignUp from '../views/SignUp.vue'
 import Books from '../views/Books.vue'
 import CreateBook from '../views/CreateBook.vue'
 import UserBooks from '../views/UserBooks.vue'
@@ -27,7 +27,7 @@ const routes = [
   {
     path: '/singup',
     name: 'singup',
-    component: SingUp
+    component: SignUp
   },
   {
     path: '/books',
