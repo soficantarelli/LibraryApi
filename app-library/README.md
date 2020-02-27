@@ -1,350 +1,458 @@
---Obtener todos los libros
+#   Library
 
-*Request*
-GET url/libros
+## Run
+```
+node index.js
+```
+# Endpoints
 
-*Response*
-    Status: 200 OK
-[
-    {
-        "id": <"id">,
-        "titulo": <"titulo">,
-        "cantidad": <"cantidad">
-    }
-]
+### Account
+- [Signup](#POST-signup)  
+- [Login](#POST-login)  
+- [Logout](#POST-logout) 
 
---Obtener Socios
+### Books
+- [Get all Books](#Get-books)  
+- [Get Book by ID](#GET-books/:id)  
+- [Create Book](#POST-books)  
+- [Update Book](#PUT-books/:id)
+- [Delete Book](#DELETE-books/:id)  
 
-*Request*
+### Partners
+- [Get All Partners](#GET-partners)  
+- [Get Loan's Partner](#GET-partners/loans/:id)  
+ 
 
-GET url/socios
-
-*Response*
-
-    Status: 200 OK
-[
-    {
-        "id": <"id">,
-        "nombre": <"nombre">
-    }
-]
-
-
---Obtener Prestamos
-
-*Request*
-
-GET url/prestamos
-
-*Response*
- Status: 200 OK
-[
-    {
-        "id": <"id">,
-        "idLibro": <"idLibro">,
-        "idSocio": <"idSocio">,
-        "fechaVencimiento": <"fechaVencimiento">
-    }
-]
+### Loans
+- [Get Loans](#GET-loans)   
+- [Create Loan](#POST-loans)  
+- [Delete Loan](#DELETE-loansid)  
 
 
---Obtener los libros prestados al socio con sus fechas de vencimiento
 
-*Request*
+### Account
 
-GET url/socios/:idsocio/prestamos
-
-Params key: idSocio
-       value: 2
-
-*Response*
-Status: 200 OK
-[
-    {
-        "idLibro": <"idLibro">,
-        "Fecha de vencimiento": <"fechaVencimiento">
-    }
-]
-
-Params key: idSocio
-       value: 3
-
-*Response*
-Status: 200 OK
-
-[
-    {
-        "No tiene prestamos": 0
-    }
-]
-
-Params key: idSocio
-       value: 8
-
-*Response*
-Status: 404 Not Found
+## POST signup
+```css
+localhost:5555/signup
+```
+# *Request Body*
+```json
 {
-    "message": "No existe el socio solicitado"
+    "name":"Admin",
+	"username":"Admin",
+	"password":"Admin"
 }
-
-
-
---Actualiza la cantidad de un libros
-
-*Request*
-
-PUT url/libros/:idlibro
-
-Params key: idlibro 
-       value: 1
-
-Body:
+```
+# *Example Response*
+```json
 {
-	"cantidad":  <"cantidad">
+    "code":200,
+    "message": "User Created Successfully"
 }
-
-*Response*
-Status: 400
-
+```
+```json
 {
-    "message": "No se puede actualizar la cantidad de libros, es menor a la cantidad de libros prestados"
+    "code":400,
+    "message": "Existing username"
 }
+```
 
-Params key: idlibro 
-       value: 1
-
-Body:
+## POST login
+```css
+localhost:5555/login
+```
+# *Request Body*
+```json
 {
-	"cantidad":  <"cantidad">
+	"username":"Admin",
+	"password":"Admin"
 }
-
-*Response*
-
-Status: 200
+```
+# *Example Response*
+```json
 {
-    "message": "Se actualizo correctamente la cantidad del libro"
+    "code":200,
+    "rol": "L",
+    "username": "Admin",
+    "idUser": 1
 }
-
-
-Params key: idlibro 
-       value: 5
-
-Body:
+```
+```json
 {
-	"cantidad":  <"cantidad">
+    "code":400,
+    "message": "Enter a username and password"
 }
-
-*Response*
-Status: 400
+```
+```json
 {
-    "message": "No se encuentra el id del libro ingresado"
+    "code":404,
+    "message": "Username or password incorrect"
 }
+```
 
-
---Agregar nuevo socio
-
-POST url/socios
-
-*Request*
-Body:
+## POST logout
+```css
+localhost:5555/logout
+```
+# *Example Response*
+```json
 {
-	 "id": <"id">,
-    "nombre": <"nombre">
+    "code":200,
+    "message": "Logged Out"
 }
-
-*Response*
-Status: 200 OK
-[
-    {
-        "id": <"id">,
-        "nombre": <"nombre">
-    }
-]
-
-*Request*
-Body:
+```
+```json
 {
-	"id": <"id">
+    "code":400,
+    "message": "Couldn't Log Out"
 }
+```
 
-*Response*
-Status: 400 Bad Request
+### Books
 
+## GET books
+```css
+localhost:5555/books
+```
+# *Example Response*
+```json
 {
-    "message": "Datos incompletos"
+    "code":200,
+    "data": [
+        {
+            "id": 1,
+            "title": "1984",
+            "author": "George Orwell",
+            "amount": 11
+        }
+    ]
 }
-
-Body:
+```
+```json
 {
-	"id": 3, 
-	"nombre": "Socio 3"
+    "code":400,
+    "message": "You must be logged in"
 }
+```
 
-*Response*
-Status: 400 Bad Request
+## GET books id
+```css
+localhost:5555/books/:id
+```
+
+# *Request Body*
+```json
 {
-    "message": "El socio ya existe"
+	 "data": [
+        {
+            "title": "1984",
+            "author": "George Orwell",
+            "amount": 15
+        }
+    ]
 }
-
---Agrega nuevo libro
-
-*Request*
-
-POST url/libros
-Body:
-    {
-	"id": <"id">,
-	"titulo": <"titulo">, 
-	"cantidad":  <"cantidad">
-
-}
-*Response*
-Status: 201 Created
-[
-    {
-        "id": <"id">,
-        "titulo": <"titulo">,
-        "cantidad":  <"cantidad">
-    }
-]
-
-*Request*
-Body:
+```
+# *Example Response*
+```json
+New Amount
 {
-	"id": <"id">
+    "code":200,
+    "data": [
+        {
+            "amount": 10
+        }
+    ]
 }
-
-*Response*
-Status: 400 Bad Request
+Amount Available
 {
-    "message": "Datos incompletos"
+    "code":200,
+    "data": [
+        {
+            "amount": 2
+        }
+    ]
 }
-
-
-
---Registra un prestamo de un libro a un socio
-
-*Request*
-
-POST url/prestamos
-
-body
+```
+```json
 {
-	"id": <"id">,
-	"idLibro": <"idLibro">,
-	"idSocio": <"idSocio">,
-	"dias": <"dias">
-}
-
-
-*Response*
-
-Status: 201 Created
+    "code":400,
+    "message": "You must be logged in and be an admin"
+},
 {
-    "message": "El prestamo se registro correctamente"
+    "code":404,
+    "message": "Book not found"
 }
+```
 
-body
+## POST books
+```css
+localhost:5555/books
+```
+# *Request Body*
+```json
 {
-	
-	"id": <"id">,
-	"idLibro": <"idLibro">,
-	"idSocio": <"idSocio">,
-	"dias": <"dias">
+	 "data": [
+        {
+            "title": "1984",
+            "author": "George Orwell",
+            "amount": 15
+        }
+    ]
 }
-
-*Response*
-Status: 400 Bad Request
+```
+# *Example Response*
+```json
 {
-    "message": "No hay libros disponibles"
+    "code":201,
+    "message": "Book successfully added"
 }
-
-body
+```
+```json
 {
-	"id": <"id">,
-	"idLibro": <"idLibro">,
-	"idSocio": <"idSocio">,
-	"dias": <"dias">
-}
-
-*Response*
-Status: 400 Bad Request
+    "code":400,
+    "message": "You must be logged in and be an admin"
+},
 {
-    "message": "El socio adeuda libros"
-}
-
-*Response*
-Status: 404 Not Found
+    "code":401,
+    "message": "Wrong parameters"
+},
 {
-    "message": "No existe el socio"
+    "code":401,
+    "message": "Existing book"
 }
+```
 
-*Response*
-Status: 404 Not Found
+## PUT book/:id
+```css
+localhost:5555/book/:id
+```
+* ### **Parameters**
+||Type|Value |
+|:----:|-----|
+| `id` |  1  |
+
+# *Request Body*
+```json
 {
-    "message": "No existe el libro"
+	 "data": [
+        {
+            "amount": 15
+        }
+    ]
 }
-
-
---Socio devuelve libro prestamo, se borra el prestamo
-
-*Request*
-
-DELETE url/prestamos/:idPrestamo
-
-Params key: :idPrestamo
-        value: 1
-
-*Response*
-Status: 200
+```
+# *Example Response*
+```json
 {
-    "message": "Se elimino correctamente el prestamo"
+    "code":200,
+    "message": "Amount successfully modified"
 }
-
-Params key: :idPrestamo
-        value: 1
-
-*Response*
-Status: 404 Not Found
-
+```
+```json
 {
-    "message": "No se puede borrar el prestamo, no existe"
+    "code":400,
+    "message": "You must be logged in and be an admin"
+},
+{
+    "code":404,
+    "message": "Book not found"
+},
+{
+    "code":401,
+    "message": "Wrong parameters"
+},
+{
+    "code":401,
+    "message": "Amount could not be modified"
 }
+```
 
+## DELETE books
+```css
+localhost:5555/books/:id
+```
+* ### **Parameters**
+||Type|Value |
+|:----:|-----|
+| `id` |  1  |
 
---Se borra un libro
-
-DELETE url/libros/:idLibro
-
-*Request*
-Params: key: idLibro
-        value: 2
-
-*Response*
-Status: 400 Bad Request
-Body:
-    {
-    "message": "No se puede eliminar el libro porque hay prestados"
+# *Example Response*
+```json
+{
+    "code":200,
+    "message": "Book ${id} successfully removed"
 }
-
-*Request*
-Params: key: idLibro
-        value: 7
-
-*Response*
-Status: 200
-Body:
-    {
-    "message": "Se elimino correctamente el libro"
+```
+```json
+{
+    "code":400,
+    "message": "You must be logged in and be an admin"
+},
+{
+    "code":404,
+    "message": "Book not found"
+},
+{
+    "code":401,
+    "message": "Book couldn't be removed"
 }
+```
 
-*Request*
-Params: key: idLibro
-        value: 2
+### Partners
 
-*Response*
-Status: 404 Not Found
-Body:
-    {
-    "message": "No se puede eliminar el libro porque no existe"
+## GET Partners  
+```css
+localhost:5555/partners
+```
+# *Example Response*
+```json
+{
+    "code":200,
+    "data": [
+        {
+            "id": 2,
+            "names": "Partner",
+            "username": "Partner",
+            "pass": "Partner",
+            "roles": "P"
+        }
+    ]
 }
+```
+```json
+{
+    "code":400,
+    "message": "You must be logged in and be an admin"
+}
+```
+
+## GET partners/loans/:id
+```css
+localhost:5555/partners/loans/:id
+```
+* ### **Parameters**
+||Type|Value |
+|:----:|-----|
+| `id` |  2  |
+
+ # *Example Response*
+```json
+{
+    "code":200,
+    "data": [
+        {
+            "idPartner": 2,
+            "dueDate": 1582487713256
+        }
+    ]
+}
+```
+```json
+{
+    "code":400,
+    "message": "You must be logged in"
+},
+{
+    "code":401,
+    "message": "The user has no loans or not exist"
+}
+```
+
+### Loans
+
+## GET Loans  
+```css
+localhost:5555/loans
+```
+# *Example Response*
+```json
+{
+    "code":200,
+    "data": [
+        {        
+            "id": 1,
+            "idPartner": 2,
+            "idBook": 1,
+            "dueDate": 1582487713256
+        }
+    ]
+}
+```
+```json
+{
+    "code":400,
+    "message": "You must be logged in"
+},
+{
+    "code":401,
+    "message": "The user has no loans or not exist"
+}
+```
+
+## POST Loans  
+```css
+localhost:5555/loans
+```
+# *Request Body*
+```json
+{
+    "data": [
+        {        
+            "idPartner": 2,
+            "idBook": 1,
+            "dueDate": 2
+        }
+    ]
+}
+```
+# *Example Response*
+```json
+{
+    "code":200,
+    "message": "Loan successfully created"
+}
+```
+```json
+{
+    "code":400,
+    "message": "You must be logged in"
+},
+{
+    "code":404,
+    "message": "Book not found"
+},
+{
+    "code":401,
+    "message": "Past due loans",
+    "message": "Number of copies not available",
+    "message": "Wrong number",
+    "message": "Loan could not be created"
+}
+```
+## DELETE Loans  
+```css
+localhost:5555/loans/:id
+```
+* ### **Parameters**
+||Type|Value |
+|:----:|-----|
+| `id` |  1  |
+
+# *Example Response*
+```json
+{
+    "code":200,
+    "message": "Loan successfully deleted"
+}
+```
+```json
+{
+    "code":400,
+    "message": "You must be logged in"
+}
+{
+    "code":404,
+    "message": "Loan not found"
+}
+```
