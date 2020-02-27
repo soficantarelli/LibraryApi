@@ -6,7 +6,7 @@ services:
       - "5555:5555"
     depends_on:
       - db
-    command: node ./app.js
+    command: node ./index.js
     environment:
       WAIT_HOSTS: db:3306
   db:

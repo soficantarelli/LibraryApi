@@ -77,7 +77,6 @@
           	password: this.password
         })
         .then(response => {
-					this.loading = false;
 					const id = response.data.id;
 					const rol = response.data.roles;
 					this.$store.commit("login", {

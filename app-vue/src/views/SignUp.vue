@@ -67,7 +67,7 @@
 
 <script>
   export default {
-	  name: "singup",
+	  name: "signup",
 	data: () => ({
 		name: "",
     username: "",
@@ -79,13 +79,13 @@
     formLogin(e) {
 		e.preventDefault();
       	this.axios
-        	.post("http://localhost:5555/singup", {
+        	.post("http://localhost:5555/signup", {
 			      name: this.name,
           	username: this.username,
           	password: this.password
         })
         .then(response => {				
-					if (res.status == 200) {
+					if (response.status == 200) {
 						this.$router.push("/login");
 					} 
 
