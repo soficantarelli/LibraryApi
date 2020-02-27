@@ -1,0 +1,32 @@
+version: '2.0'
+services:
+  api:
+    build: ./app-library
+    ports:
+      - "5555:5555"
+    depends_on:
+      - db
+    command: node ./app.js
+    environment:
+      WAIT_HOSTS: db:3306
+  db:
+    image: mysql:5.7
+    volumes:
+      - db:/var/lib/mysql
+      - type: bind
+        source: ./app-library/init.sql
+        target: /docker-entrypoint-initdb.d/init.sql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'dbLibrary'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'Sofia-123'
+      MYSQL_ROOT_PASSWORD: 'Sofia-123'
+  front:
+    build: ./app-vue
+    ports:
+      - "8080:8080"
+    command: npm run serve
+      
+volumes:
+  db: 

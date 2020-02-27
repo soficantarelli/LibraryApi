@@ -10,7 +10,7 @@ const Hour = 1000 * 60 * 60
 const app = express();
 
 app.use(cors({
-    origin: "http://localhost:8081",
+    origin: "http://localhost:8080",
     optionsSuccessStatus: 200,
     credentials: true
 }));
@@ -35,7 +35,7 @@ app.use(bodyParser.json({ type: 'applicationlication/json' }));
 
 require("./routes/app.routes")(app);
 
-var server = app.listen(8080, '0.0.0.0', function () {
+var server = app.listen(5555, '0.0.0.0', function () {
     var host = server.address().address;
     var port = server.address().port;
     console.log("App listening at http://%s:%s", host, port);
