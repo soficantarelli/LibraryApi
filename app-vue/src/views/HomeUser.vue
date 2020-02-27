@@ -25,8 +25,6 @@
         <template slot="items" slot-scope="props">
           <td>{{ props.item.book }}</td>
           <td class="text-xs-left">{{ props.item.expired }}</td>
-          <td class="justify-center layout px-0">
-          </td>
         </template>
       </v-data-table>
        

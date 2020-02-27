@@ -42,12 +42,10 @@
           <td>{{ props.item.title }}</td>
           <td class="text-xs">{{ props.item.author }}</td>
           <td class="text-xs">{{ props.item.amount }}</td>
-
-          <td class="left layout">
-            <v-icon small class="mr-2" color="success" @click="editItem(props.item)">edit</v-icon>
-
-            <v-icon small color="error" @click="deleteItem(props.item)">delete</v-icon>
-          </td>
+        </template>
+        <template v-slot:item.action="{ item }">
+          <v-icon small class="mr-2" @click="editItem(item)">edit</v-icon>
+          <v-icon small @click="deleteItem(item)">delete</v-icon>
         </template>
       </v-data-table>
     </v-container>
@@ -115,59 +113,59 @@ export default {
         .delete("http://localhost:8080/books/" + idBook)
         .then(response => {
           if (response.status == 200) {
-            this.message = "Book successfully removed"
+            this.message = "Book successfully removed";
             this.getAllBooks();
           }
-          
         })
         .catch(error => {
           if (error.response.status == 400) {
             this.$store.commit("logout");
-            this.message = "Session expired"
-            .then(() => this.$router.push("/"));
+            this.message = "Session expired".then(() => this.$router.push("/"));
           } else if (error.response.status == 404) {
-            this.message = "Book not found"
-            .then(() => this.$router.push("/books"));
+            this.message = "Book not found".then(() =>
+              this.$router.push("/books")
+            );
           } else {
-            this.message = "Book couldn't be removed"
-            .then(() => this.$router.push("/books"));
+            this.message = "Book couldn't be removed".then(() =>
+              this.$router.push("/books")
+            );
           }
         });
     },
-    putBook(idBook, newAmount){
-      this.$axios
-      .put("http://localhost:8080/book/" + idBook), {
-            amount: newAmount
-      }
-      .then(response => {
-          if (response.status == 200) {
-            this.message = "Amount successfully modified"
-            this.getAllBooks();
-          }
-          
-        })
-        .catch(error => {
-          if (error.response.status == 400) {
-            this.$store.commit("logout");
-            this.message = "Session expired"
-            .then(() => this.$router.push("/"));
-
-          } else if (error.response.status == 404) {
-            this.message = "Book not found"
-            .then(() => this.$router.push("/books"));
-
-          } else {
-            this.message = "Wrong parameters or Amount couldn't be removed"
-            .then(() => this.$router.push("/books"));
-          }
-        });
+    putBook(idBook, newAmount) {
+      this.$axios.put("http://localhost:8080/book/" + idBook),
+        {
+          amount: newAmount
+        }
+          .then(response => {
+            if (response.status == 200) {
+              this.message = "Amount successfully modified";
+              this.getAllBooks();
+            }
+          })
+          .catch(error => {
+            if (error.response.status == 400) {
+              this.$store.commit("logout");
+              this.message = "Session expired".then(() =>
+                this.$router.push("/")
+              );
+            } else if (error.response.status == 404) {
+              this.message = "Book not found".then(() =>
+                this.$router.push("/books")
+              );
+            } else {
+              this.message = "Wrong parameters or Amount couldn't be removed".then(
+                () => this.$router.push("/books")
+              );
+            }
+          });
     },
 
     editItem(item) {
       this.idBook = item.idBook;
       this.title = item.title;
       this.author = item.author;
-      this.amount = item.amount
+      this.amount = item.amount;
       this.dialog = true;
     },
 

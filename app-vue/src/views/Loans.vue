@@ -26,15 +26,11 @@
           <td>{{ props.item.book }}</td>
           <td class="text-xs">{{ props.item.user }}</td>
           <td class="text-xs">{{ props.item.expired }}</td>
-            
-        <td class="left layout">            
-            <v-icon small color="error" 
-            @click="deleteItem(props.item)">delete</v-icon>
-          </td>
+        </template>
+               <template v-slot:item.action="{ item }">
+          <v-icon small @click="deleteItem(item)">delete</v-icon>
         </template>
       </v-data-table>
-
-
     </v-container>
 
 
