@@ -53,7 +53,7 @@ export default {
   methods: {
     getPartnerIdLoan(idUser){
       this.$axios
-      .get("http://localhost:8080/partners/loans" + idUser)
+      .get("http://localhost:5555/partners/loans" + idUser)
       .then(response => {
          if (response.status == 200) {
               this.loans = response.data;

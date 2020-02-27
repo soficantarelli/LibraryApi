@@ -63,7 +63,7 @@ export default {
   methods: {
     getAllLoans() {
       this.$axios
-        .get("http://localhost:8080/loans")
+        .get("http://localhost:5555/loans")
         .then(response => {
           if (response.status == 200) {
               this.loans = response.data;
@@ -82,7 +82,7 @@ export default {
 
     deleteLoan(idLoan){
       this.$axios
-        .delete("http://localhost:8080/loans/" + idLoan)
+        .delete("http://localhost:5555/loans/" + idLoan)
         .then(response => {
           if (response.status == 200) {
             this.message = "Loan successfully removed"

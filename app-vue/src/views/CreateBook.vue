@@ -62,7 +62,7 @@ export default {
   }),
   methods: {
     postBook() {
-      this.$axios.post("http://localhost:8080/books", {
+      this.$axios.post("http://localhost:5555/books", {
         title: this.title,
         author: this.author,
         amount: this.amount

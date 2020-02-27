@@ -91,7 +91,7 @@ export default {
   methods: {
     getAllBooks() {
       this.$axios
-        .get("http://localhost:8080/books")
+        .get("http://localhost:5555/books")
         .then(response => {
           if (response.status == 200) {
             if (response.data.length == 0) {
@@ -110,7 +110,7 @@ export default {
     },
     deleteBook(idBook) {
       this.$axios
-        .delete("http://localhost:8080/books/" + idBook)
+        .delete("http://localhost:5555/books/" + idBook)
         .then(response => {
           if (response.status == 200) {
             this.message = "Book successfully removed";
@@ -133,7 +133,7 @@ export default {
         });
     },
     putBook(idBook, newAmount) {
-      this.$axios.put("http://localhost:8080/book/" + idBook),
+      this.$axios.put("http://localhost:5555/book/" + idBook),
         {
           amount: newAmount
         }

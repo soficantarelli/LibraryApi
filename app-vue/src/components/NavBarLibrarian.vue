@@ -1,7 +1,5 @@
 <template>
-  <div id="navega">
     <div id="menu">
-      <div id="fijo">
         <v-toolbar dark color="grey">
           <v-tabs color="white">
               <v-tab to="homelibrarian">
@@ -18,8 +16,6 @@
             <v-btn depressed rounded color="dark red" to="/">Logout</v-btn>
         </v-toolbar>  
       </div>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -29,7 +25,7 @@ export default {
 </script>
 
 <style scope>
-#navega #menu #fijo {
+#menu {
   position: fixed;
   font-size: 11pt;
   text-align: center;

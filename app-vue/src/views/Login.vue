@@ -72,13 +72,13 @@
     formLogin(e) {
 		e.preventDefault();
       	this.axios
-        	.post("http://localhost:8000/login", {
+        	.post("http://localhost:5555/login", {
           	username: this.username,
           	password: this.password
         })
         .then(response => {
 					this.loading = false;
-					const id = response.data.idPartner;
+					const id = response.data.id;
 					const rol = response.data.roles;
 					this.$store.commit("login", {
 						idUser: id,

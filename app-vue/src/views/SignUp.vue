@@ -79,7 +79,7 @@
     formLogin(e) {
 		e.preventDefault();
       	this.axios
-        	.post("http://localhost:8000/singup", {
+        	.post("http://localhost:5555/singup", {
 			      name: this.name,
           	username: this.username,
           	password: this.password

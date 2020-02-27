@@ -50,7 +50,7 @@ export default {
   methods: {
     getAllBooks() {
       this.$axios
-        .get("http://localhost:8080/books")
+        .get("http://localhost:5555/books")
         .then(response => {
           if (response.status == 200) {
             if (response.data.length == 0) {

@@ -49,7 +49,7 @@ export default {
   methods: {
     getAllPartners() {
       this.$axios
-        .get("http://localhost:8080/partners")
+        .get("http://localhost:5555/partners")
         .then(response => {
           if (response.status == 200) {
             if (response.data.length == 0) {
