@@ -13,9 +13,7 @@ services:
     image: mysql:5.7
     volumes:
       - db:/var/lib/mysql
-      - type: bind
-        source: ./app-library/init.sql
-        target: /docker-entrypoint-initdb.d/init.sql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
     environment:
       MYSQL_DATABASE: 'dbLibrary'
