@@ -30,7 +30,7 @@ node index.js
 
 
 
-### Account
+# Account
 
 ## POST signup
 ```css
@@ -44,7 +44,7 @@ localhost:5555/signup
 	"password":"Admin"
 }
 ```
-# *Example Response*
+# **Example Response**
 ```json
 {
     "code":200,
@@ -69,7 +69,7 @@ localhost:5555/login
 	"password":"Admin"
 }
 ```
-# *Example Response*
+# **Example Response**
 ```json
 {
     "code":200,
@@ -95,7 +95,7 @@ localhost:5555/login
 ```css
 localhost:5555/logout
 ```
-# *Example Response*
+# **Example Response**
 ```json
 {
     "code":200,
@@ -109,13 +109,13 @@ localhost:5555/logout
 }
 ```
 
-### Books
+# Books
 
 ## GET books
 ```css
 localhost:5555/books
 ```
-# *Example Response*
+# **Example Response**
 ```json
 {
     "code":200,
@@ -153,7 +153,7 @@ localhost:5555/books/:id
     ]
 }
 ```
-# *Example Response*
+# **Example Response**
 ```json
 New Amount
 {
@@ -201,7 +201,7 @@ localhost:5555/books
     ]
 }
 ```
-# *Example Response*
+# **Example Response**
 ```json
 {
     "code":201,
@@ -242,7 +242,7 @@ localhost:5555/book/:id
     ]
 }
 ```
-# *Example Response*
+# **Example Response**
 ```json
 {
     "code":200,
@@ -277,7 +277,7 @@ localhost:5555/books/:id
 |:----:|-----|
 | `id` |  1  |
 
-# *Example Response*
+# **Example Response**
 ```json
 {
     "code":200,
@@ -299,13 +299,13 @@ localhost:5555/books/:id
 }
 ```
 
-### Partners
+# Partners
 
 ## GET Partners  
 ```css
 localhost:5555/partners
 ```
-# *Example Response*
+# **Example Response**
 ```json
 {
     "code":200,
@@ -336,7 +336,7 @@ localhost:5555/partners/loans/:id
 |:----:|-----|
 | `id` |  2  |
 
- # *Example Response*
+ # **Example Response**
 ```json
 {
     "code":200,
@@ -359,13 +359,13 @@ localhost:5555/partners/loans/:id
 }
 ```
 
-### Loans
+# Loans
 
 ## GET Loans  
 ```css
 localhost:5555/loans
 ```
-# *Example Response*
+# **Example Response**
 ```json
 {
     "code":200,
@@ -406,7 +406,7 @@ localhost:5555/loans
     ]
 }
 ```
-# *Example Response*
+# **Example Response**
 ```json
 {
     "code":200,
@@ -439,7 +439,7 @@ localhost:5555/loans/:id
 |:----:|-----|
 | `id` |  1  |
 
-# *Example Response*
+# **Example Response**
 ```json
 {
     "code":200,
