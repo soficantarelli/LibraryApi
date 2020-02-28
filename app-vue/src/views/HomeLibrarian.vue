@@ -21,11 +21,9 @@
         class="elevation-1"
       >
         <template slot="items" slot-scope="props">
-          <td>{{ props.item.id }}</td>
-          <td>{{ props.item.names }}</td>
           <td>{{ props.item.partners }}</td>
-          <td>{{ props.item.pass }}</td>
-          <td>{{ props.item.roles }}</td>
+          <td class="justify-center layout px-0">
+          </td>
         </template>
       </v-data-table>
        
@@ -39,7 +37,7 @@ export default {
     data: () => ({
     headers: [
       {
-        text: "Partners",value: "partners",
+        text: "Partners",value: "partners"
       }],
     partners:[],
   }),
@@ -53,7 +51,13 @@ export default {
       this.$axios
         .get("http://localhost:5555/partners")
         .then(response => {
-            this.partners = response.data.username;
+          if (response.status == 200) {
+            if (response.data.length == 0) {
+              this.partners = "No partners availables";
+            } else {
+              this.partners = response.data;
+            }
+          }
         })
         .catch(error => {
           if (error.response.status == 400) {

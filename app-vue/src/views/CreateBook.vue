@@ -70,7 +70,7 @@ export default {
       .then(response => {
            if (res.status == 200) {
             this.message="Book successfully added"
-						this.$router.push("/homeuser");
+						this.$router.push("/books");
 					} 
       })
       .catch(e => {
