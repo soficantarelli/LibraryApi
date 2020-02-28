@@ -7,23 +7,20 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         loggedIn: false,
-        userId: null,
-        username: null,
-        role: null
+        idUser: null,
+        rol: null
     },
     plugins: [createPersistedState()],
     mutations: {
         login (state,user){
             state.loggedIn = true;
             state.idUser = user.idUser;
-            state.username = user.username;
-            state.role = user.userRole;
+            state.rol = user.rol;
         },
         logout (state){
             state.loggedIn = false;
             state.idUser = null;
-            state.username = null;
-            state.role = null;
+            state.rol = null;
         }
     }
 })

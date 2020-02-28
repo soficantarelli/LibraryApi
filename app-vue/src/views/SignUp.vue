@@ -18,7 +18,7 @@
                     label="Name"
                     name="name"
                     prepend-icon="person"
-                    v-model="text"
+                    v-model="name"
 					:rules="[v => !!v || 'You must enter your name']"
 					required
                   />
@@ -27,7 +27,7 @@
                     label="Username"
                     name="username"
                     prepend-icon="person"
-                    v-model="text"
+                    v-model="username"
 					:rules="[v => !!v || 'You must enter your username']"
 					required
                   />

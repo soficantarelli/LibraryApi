@@ -18,7 +18,7 @@
                     label="Username"
                     name="username"
                     prepend-icon="person"
-                    v-model="text"
+                    v-model="username"
 					:rules="[v => !!v || 'You must enter your user']"
 					required
                   />
@@ -77,19 +77,22 @@
           	password: this.password
         })
         .then(response => {
-					const id = response.data.id;
-					const rol = response.data.roles;
-					this.$store.commit("login", {
-						idUser: id,
-						userRol: rol
-          } );
-          if (response.data.role == 'P') {
-            this.$router.push("/homeuser");
-          }
-          if (response.data.role == 'L') {
-            this.$router.push("/homelibrarian");
-          }  
+          const idUser = response.data.idUser;
+          const rol = response.data.rol;
+          
+          this.$store.commit("login", {
+            idUser: idUser,
+						rol: rol
+          });
 
+
+						if (response.data.rol == "P") {
+            this.$router.push("/homeuser");
+            }
+
+          if (response.data.rol == "L") {
+            this.$router.push("/homelibrarian");
+          } 
     })
     
 		.catch(error => {

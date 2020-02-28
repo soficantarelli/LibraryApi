@@ -36,4 +36,4 @@ CREATE TABLE loans (
 );
 
 INSERT INTO partners (id, names, username, pass, roles)
-VALUES (1, "Librarian", "Librarian", "Librarian", "L"); 
+VALUES (1, "Librarian", "Librarian", "Librarian", 'L'); 
