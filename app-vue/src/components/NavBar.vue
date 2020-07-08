@@ -1,9 +1,7 @@
 <template>
     <div id="menu">
         <v-toolbar dark color="grey">
-            <v-toolbar-side-icon>
-            <v-img src="@/assets/logo.jpg" height="30px" width="40px"></v-img>
-        </v-toolbar-side-icon>
+          <v-img src="@/assets/logo.jpg" height="30px" width="40px"></v-img>
           <v-btn to="/" text rounded>Home</v-btn>
           <v-spacer></v-spacer>
           <h1 class="black--text text-center font-weight-bold"> Welcome to the virtual library</h1>
@@ -29,5 +27,10 @@ export default {
   left: 0px; 
   width: 100%;
   z-index: 1;
+}
+#logo{
+  position: fixed;
+  text-align: left;
+  width: 10%;
 }
 </style> 

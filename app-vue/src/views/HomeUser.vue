@@ -7,26 +7,22 @@
         <v-container grid-list-md mt-10>
             
 
-         <v-toolbar flat color="white">
-        <v-toolbar-title>My Loans</v-toolbar-title>
-        <v-divider
-          class="mx-2"
-          inset
-          vertical
-        ></v-divider>
-        <v-spacer></v-spacer>
-          <v-btn color="primary" dark class="mb-2" to="/createloans">New Loan</v-btn>
-      </v-toolbar>
-      <v-data-table
-        :headers="headers"
-        :items="loans"
-        class="elevation-1"
-      >
-        <template slot="items" slot-scope="props">
-          <td>{{ props.item.book }}</td>
-          <td class="text-xs-left">{{ props.item.expired }}</td>
-        </template>
-      </v-data-table>
+         <v-row align="center" justify="center">
+        <v-col cols="4" align-self="start">
+          <v-card max-width="600" class="mx-auto" shaped>
+            <v-toolbar color="blue-grey darken-3" dark>
+              <v-toolbar-title>Loans</v-toolbar-title>
+            </v-toolbar>
+            <v-list two-line subheader elevation="10">
+              <v-list-item v-for="(loan,index) in loans" :key="index">
+                <v-list-item-content>
+                  <v-list-item-idPartner>{{loan.idPartner}}</v-list-item-idPartner>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-card>
+        </v-col>
+      </v-row>
        
         </v-container>
     </div>
@@ -37,12 +33,6 @@ export default {
     data: () => ({
     idUser: this.$store.state.idUser,
     message:"",
-    headers: [
-      {
-        text: "Book",value: "book"
-      },
-      { text: "Expired Date", value: "expired" }
-    ],
     loans: [],
   }),
 
@@ -52,11 +42,17 @@ export default {
 
   methods: {
     getPartnerIdLoan(idUser){
+      this.loans = [];
       this.$axios
       .get("http://localhost:5555/partners/loans" + idUser)
       .then(response => {
-         if (response.status == 200) {
-              this.loans = response.data;
+         response.data.forEach(loan => {
+            this.loans.push(loan);
+          });
+          if (this.loans.length == 0) {
+            this.loans.push({
+              loan: "Not Found partners"
+            });
           }
       })
       .catch(error => {

@@ -1,45 +1,34 @@
 <template>
-<div>    
+  <div>
     <v-container grid-list-md>
-          <NavBarLibrarian></NavBarLibrarian>
-      </v-container>
+      <NavBarLibrarian></NavBarLibrarian>
+    </v-container>
 
-       <v-container grid-list-md mt-10>
-            
-
-         <v-toolbar flat color="white">
-        <v-toolbar-title>Partners</v-toolbar-title>
-        <v-divider
-          class="mx-2"
-          inset
-          vertical
-        ></v-divider>
-      </v-toolbar>
-      <v-data-table
-        :headers="headers"
-        :items="partners"
-        class="elevation-1"
-      >
-        <template slot="items" slot-scope="props">
-          <td>{{ props.item.partners }}</td>
-          <td class="justify-center layout px-0">
-          </td>
-        </template>
-      </v-data-table>
-       
-        </v-container>
-
-</div>
+    <v-container grid-list-md mt-10>
+      <v-row align="center" justify="center">
+        <v-col cols="4" align-self="start">
+          <v-card max-width="600" class="mx-auto" shaped>
+            <v-toolbar color="blue-grey darken-3" dark>
+              <v-toolbar-title>Partners</v-toolbar-title>
+            </v-toolbar>
+            <v-list two-line subheader elevation="10">
+              <v-list-item v-for="(partner,index) in partners" :key="index">
+                <v-list-item-content>
+                  <v-list-item-title>{{partner.username}}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script>
 export default {
-    data: () => ({
-    headers: [
-      {
-        text: "Partners",value: "partners"
-      }],
-    partners:[],
+  data: () => ({
+    partners: []
   }),
 
   created() {
@@ -48,15 +37,17 @@ export default {
 
   methods: {
     getAllPartners() {
+      this.partners = [];
       this.$axios
         .get("http://localhost:5555/partners")
         .then(response => {
-          if (response.status == 200) {
-            if (response.data.length == 0) {
-              this.partners = "No partners availables";
-            } else {
-              this.partners = response.data;
-            }
+          response.data.forEach(partner => {
+            this.partners.push(partner);
+          });
+          if (this.partners.length == 0) {
+            this.partners.push({
+              partner: "Not Found partners"
+            });
           }
         })
         .catch(error => {
@@ -67,9 +58,8 @@ export default {
         });
     }
   }
-}
+};
 </script>
 
 <style scoped>
-
 </style>

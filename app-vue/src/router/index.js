@@ -10,6 +10,7 @@ import Loan from '../views/Loans.vue'
 import CreateLoan from '../views/CreateLoans.vue'
 import HomeUser from '../views/HomeUser.vue'
 import HomeLibrarian from '../views/HomeLibrarian.vue'
+import EditBook from '../views/EditBook.vue'
 
 Vue.use(VueRouter)
 
@@ -63,6 +64,11 @@ const routes = [
     path: '/homelibrarian',
     name: 'homelibrarian',
     component: HomeLibrarian
+  },
+  {
+    path: '/editbook/:bookId',
+    name: 'editbook',
+    component: EditBook
   }
 ]
 

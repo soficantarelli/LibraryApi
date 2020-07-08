@@ -67,10 +67,9 @@ module.exports = {
     
     findBookId: (id) => {
 
-        const result = query(`SELECT * 
-                                FROM books
-                                WHERE id = ?`, [id]);
-        
+        const result = query(`select * 
+                                from books
+                                where id = ?`, [id]);
         return result;
     },
 
@@ -79,11 +78,7 @@ module.exports = {
         const result = query(`SELECT * 
                                 FROM books
                                 WHERE title = ? and author = ?`, [title, author]);
-        if(result.length > 0 ) {
-            return result;
-        }else{
-            return -1;
-        }
+        return result;
     },
 
     postBook: (title, author, amount) => {
@@ -96,19 +91,19 @@ module.exports = {
 
     amountOfCopiesBorrowed: (id) => {
 
-        const result = query(`SELECT b.amount-COUNT(l.idBook) as Available
-                                FROM loans l
-                                    JOIN books b
-                                        on l.idBook = b.id
-                                WHERE l.idBook = ?
-                                GROUP BY l.idBook, b.id, b.amount`, [id]);
+        const result = query(`SELECT COUNT(*) as borrowed
+                                FROM loans
+                                WHERE idBook = ?`, [id]);
     
-        return result;
+        if(result[0].borrowed == 0) {
+            return 0;
+        }
+        return result[0].borrowed;
     },
 
     amountOfCopies: (id) => {
 
-        const result = query(`SELECT amount as Available
+        const result = query(`SELECT amount
                                 FROM books 
                                 WHERE id = ?`, [id]);
         
@@ -120,14 +115,15 @@ module.exports = {
         const result = query(`UPDATE books 
                                 SET amount = ?
                                 WHERE id = ?`, [cantidadNueva, idLibro]);
+        
         return result;
     },
 
     deleteBook: (id) => {
-
         const result = query(`DELETE 
                                 FROM books
                                 WHERE id = ?`, [id]);
+
         return result;
     },
 

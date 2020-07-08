@@ -1,52 +1,46 @@
 <template>
-<div>    
+  <div>
     <v-container grid-list-md mb-10>
-        <NavBarLibrarian></NavBarLibrarian>
+      <NavBarLibrarian></NavBarLibrarian>
     </v-container>
 
     <v-container grid-list-md mt-10>
 
-        <v-toolbar flat color="white">
-        <v-toolbar-title>Loans</v-toolbar-title>
-        <v-divider
-          class="mx-2"
-          inset
-          vertical
-        ></v-divider>
-      </v-toolbar>
+      <v-row align="center" justify="center">
+        <v-col cols="4" align-self="start">
+          <v-card max-width="600" class="mx-auto" shaped>
+            <v-toolbar color="blue-grey darken-3" dark>
+              <v-toolbar-title>Books</v-toolbar-title>
+               <v-spacer></v-spacer>
+            </v-toolbar>
 
-      <v-data-table
-        :headers="headers"
-        :items="loans"
-        hide-actions
-        class="elevation-1"
-      >
-        <template slot="items" slot-scope="props">
-            
-          <td>{{ props.item.book }}</td>
-          <td class="text-xs">{{ props.item.user }}</td>
-          <td class="text-xs">{{ props.item.expired }}</td>
-        </template>
-               <template v-slot:item.action="{ item }">
-          <v-icon small @click="deleteItem(item)">delete</v-icon>
-        </template>
-      </v-data-table>
+               <v-list-item v-for="loan in loans" :key="loan.id">
+                <v-list-item-content>
+                  <div v-if="loan.nameP.length" >
+                    <v-list-item>{{loan.nameB}}, {{loan.author}}, {{loan.dueDate}}
+                  </v-list-item>
+                  </div>
+                  <div v-else>
+                    <v-list-item>{{loan.nameB}}
+                    </v-list-item>
+                  </div>
+
+                </v-list-item-content>
+              </v-list-item>
+              
+
+          </v-card>
+        </v-col>
+      </v-row>
+
     </v-container>
-
-
-</div>
+  </div>
 </template>
 
 <script>
 export default {
     data: () => ({
     dialog: false,
-    headers: [
-      { text: "Partner", value: "partner" },
-      {text: "Book",value: "book"},
-      { text: "Expired Date", value: "expired" },
-      { text: "Actions", value: "action"}
-    ],
     loans: []
   }),
 

@@ -1,63 +1,68 @@
 <template>
-    <div>    
-        <v-container grid-list-md mb-10>
-            <NavBarUser></NavBarUser>
-        </v-container>
+  <div>
+    <v-container grid-list-md mb-10>
+      <NavBarUser></NavBarUser>
+    </v-container>
 
-        <v-container grid-list-md mt-10>
-            
+    <v-container grid-list-md mt-10>
 
-         <v-toolbar flat color="white">
-        <v-toolbar-title>Books</v-toolbar-title>
-        <v-divider
-          class="mx-2"
-          inset
-          vertical
-        ></v-divider>
-      </v-toolbar>
-      <v-data-table
-        :headers="headers"
-        :items="books"
-        class="elevation-1"
-      >
-        <template slot="items" slot-scope="props">
-          <td>{{ props.item.book }}</td>
-          <td>{{ props.item.amount }}</td>
-          <td class="justify-center layout px-0">
-          </td>
-        </template>
-      </v-data-table>
-       
-        </v-container>
-    </div>
+      <v-row align="center" justify="center">
+        <v-col cols="4" align-self="start">
+          <v-card max-width="600" class="mx-auto" shaped>
+            <v-toolbar color="blue-grey darken-3" dark>
+              <v-toolbar-title>Books</v-toolbar-title>
+               <v-spacer></v-spacer>
+            </v-toolbar>
+
+               <v-list-item v-for="book in books" :key="book.id">
+                <v-list-item-content>
+                  <div v-if="book.author.length" >
+                    <v-list-item>{{book.title}}, {{book.author}}, {{book.amount}}
+                  </v-list-item>
+                  </div>
+                  <div v-else>
+                    <v-list-item>{{book.title}}
+                    </v-list-item>
+                  </div>
+
+                </v-list-item-content>
+              </v-list-item>
+              
+
+          </v-card>
+        </v-col>
+      </v-row>
+
+    </v-container>
+  </div>
 </template>
 
 <script>
 export default {
-    data: () => ({
-    headers: [
-      { text: "Title", value: "title" },
-      { text: "Author", value: "author" },
-      { text: "Amount", value: "amount" }
-    ],
-    books: [],
+  data: () => ({
+    message: "",
+    books: []
   }),
 
-  ccreated() {
+  created() {
     this.getAllBooks();
   },
 
   methods: {
     getAllBooks() {
+      this.books = [];
       this.$axios
         .get("http://localhost:5555/books")
         .then(response => {
-          if (response.status == 200) {
-            if (response.data.length == 0) {
-              this.books = "No books availables";
-            } else {
-              this.books = response.data;
-            }
+          response.data.forEach(book => {
+            this.books.push(book);
+          });
+          if (this.books.length == 0) {
+            this.books.push({
+              title: "Not Found Books",
+              author: "",
+              amount: ""
+            });
           }
         })
         .catch(error => {
@@ -68,9 +73,8 @@ export default {
         });
     }
   }
-}
+};
 </script>
 
 <style scoped>
-
 </style>
