@@ -1,42 +1,52 @@
 <template>
-  <div>
+  <div class="imagen">
     <v-container grid-list-md mb-10>
       <NavBarLibrarian></NavBarLibrarian>
     </v-container>
 
-    <v-container grid-list-md mt-10>
-
-
-      <v-row align="center" justify="center">
-        <v-col cols="4" align-self="start">
-          <v-card max-width="600" class="mx-auto" shaped>
-            <v-toolbar color="blue-grey darken-3" dark>
-              <v-toolbar-title>Books</v-toolbar-title>
-               <v-spacer></v-spacer>
-              <v-btn color="primary" dark class="mb-2" to="/createbook">New Book</v-btn>
+    <v-container>
+      <v-layout>
+        <v-flex xs20 sm8 offset-sm2>
+          <v-card>
+            <v-toolbar color="#b51100">
+              <v-toolbar-title color="white">Books</v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-btn color="success" dark class="mb-2" to="/createbook">New Book</v-btn>
             </v-toolbar>
-                
-              <v-list-item v-for="book in books" :key="book.id">
-                <v-list-item-content>
-                  <div v-if="book.author.length" >
-                    <v-list-item>{{book.title}} {{book.author}}, {{"Cantidad:"}}{{book.amount}}
-                     
-                      <v-btn color="primary" dark class="btn-sm" :to="{ name: 'editbook', params: { bookId: book.id } }">Edit</v-btn>
-                      
-                      <v-btn color="primary" dark class="btn-sm" @click="deleteItem(book.id)">Delete</v-btn>
-                      
-                      </v-list-item>
-                  </div>
-                  <div v-else>
-                    <v-list-item>{{book.title}}
-                    </v-list-item>
-                  </div>
 
-                </v-list-item-content>
-              </v-list-item>
+            <table class="data">
+              <thead>
+                <tr>
+                  <th>Título</th>
+                  <th>Autor</th>
+                  <th>Cantidad</th>
+                  <th>Disponibles</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(book,index) in books" :key="index">
+                  <td>{{book.title}}</td>
+                  <td>{{book.author}}</td>
+                  <td>{{book.amount}}</td>
+                  <td>{{book.availables}}</td>
+                  <td>
+                    <v-btn
+                      color="info"
+                      dark
+                      class="btn-sm"
+                      :to="{ name: 'editbook', params: { bookId: book.id } }"
+                      style="margin-right: 5px"
+                    >Edit</v-btn>
+                    <v-btn color="error" dark class="btn-sm" @click="deleteItem(book.id)">Delete</v-btn>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </v-card>
-        </v-col>
-      </v-row>
+
+        </v-flex>
+    </v-layout>
     </v-container>
   </div>
 </template>
@@ -47,16 +57,7 @@ export default {
   data: () => ({
     dialog: "",
     message: "",
-    books: [],
-    titulo:"",
-    autor:"",
-    cantidad:"",
-    editedItem: {
-      idBook: "",
-      title: "",
-      author: "",
-      amount: ""
-    }
+    books: []
   }),
 
   watch: {
@@ -65,7 +66,7 @@ export default {
     }
   },
 
-  mounted(){
+  mounted() {
     this.getAllBooks();
   },
 
@@ -80,9 +81,7 @@ export default {
           });
           if (this.books.length == 0) {
             this.books.push({
-              title: "Not Found Books",
-              author: "",
-              amount: ""
+              title: "Not Found Books"
             });
           }
         })
@@ -97,26 +96,24 @@ export default {
       this.$axios
         .delete("http://localhost:5555/books/" + idBook)
         .then(response => {
-         // if (response.status == 200) {
-            this.message = "Book successfully removed";
-            this.refreshBooks();
-         // }
+          // if (response.status == 200) {
+          this.message = "Book successfully removed";
+          this.refreshBooks();
+          // }
         })
         .catch(error => {
           if (error.response.status == 400) {
             this.$store.commit("logout");
-            this.message = "Session expired".then(() => 
-            this.$router.push("/"));
+            this.message = "Session expired".then(() => this.$router.push("/"));
           } else {
             this.message = "Book not found".then(() =>
               this.$router.push("/books")
             );
-          } 
+          }
         });
     },
-    
 
-     refreshBooks() {
+    refreshBooks() {
       // Le doy tiempo al backend de actualizar todo
       setTimeout(() => this.getAllBooks(), 2000);
     },
@@ -130,4 +127,25 @@ export default {
 </script>
 
 <style scoped>
+.imagen {
+    background-image:url("../assets/fondo.jpg");
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    min-height: 100vh;
+    min-width: 100vh;
+}
+.data{
+  width: 100%;
+}
+
+.data th{
+    padding-right: 50px;
+    font-size: 18px;
+}
+
+.data td {
+    padding-right: 35px;
+    padding-bottom: 5px;
+    text-align: center;
+}
 </style>

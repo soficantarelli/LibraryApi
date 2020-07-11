@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="imagen">
       <v-container grid-list-md mb-10>
           <NavBarLibrarian></NavBarLibrarian>
       </v-container>
@@ -8,8 +8,8 @@
       <v-row align="center" justify="center">
         <v-col cols="12" sm="8" md="4">
           <v-card class="elevation-12">
-            <v-toolbar color="dark green" dark flat>
-              <v-toolbar-title>Create Book</v-toolbar-title>
+            <v-toolbar color="#b51100" dark flat>
+              <v-toolbar-title>New Book</v-toolbar-title>
             </v-toolbar>
 
             <v-card-text>
@@ -38,9 +38,9 @@
                 />
                 <v-spacer />
 
-                <v-btn rounded color="info" type="submit" :disabled="!valid" block @click="postBook">Create</v-btn>
+                <v-btn rounded color="success" type="submit" :disabled="!valid" block @click="postBook">Save</v-btn>
 
-                <v-btn rounded color="dark red" type="submit" block>Cancel</v-btn>
+                <v-btn rounded color="error" type="submit" block to="/books">Cancel</v-btn>
               </v-form>
             </v-card-text>
             <v-card-actions></v-card-actions>
@@ -58,7 +58,7 @@ export default {
     valid: false,
     title: "",
     author: "",
-    amount: 0
+    amount: ""
   }),
 
   methods: {
@@ -91,4 +91,11 @@ export default {
 </script>
 
 <style scoped>
+.imagen {
+    background-image:url("../assets/fondo.jpg");
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    min-height: 100vh;
+    min-width: 100vh;
+}
 </style>

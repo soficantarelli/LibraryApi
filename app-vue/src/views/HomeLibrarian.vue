@@ -1,26 +1,35 @@
 <template>
-  <div>
-    <v-container grid-list-md>
+  <div class="imagen">
+  <v-container grid-list-md mb-10>
       <NavBarLibrarian></NavBarLibrarian>
     </v-container>
 
-    <v-container grid-list-md mt-10>
-      <v-row align="center" justify="center">
-        <v-col cols="4" align-self="start">
-          <v-card max-width="600" class="mx-auto" shaped>
-            <v-toolbar color="blue-grey darken-3" dark>
-              <v-toolbar-title>Partners</v-toolbar-title>
+    <v-container>
+      <v-layout>
+        <v-flex xs20 sm8 offset-sm2>
+          <v-card>
+            <v-toolbar color="#b51100">
+              <v-toolbar-title color="white">Users</v-toolbar-title>
             </v-toolbar>
-            <v-list two-line subheader elevation="10">
-              <v-list-item v-for="(partner,index) in partners" :key="index">
-                <v-list-item-content>
-                  <v-list-item-title>{{partner.username}}</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
+
+            <table class="data">
+              <thead>
+                <tr>
+                  <th>Nombre Apellido</th>
+                  <th>Username</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(partner,index) in partners" :key="index">
+                  <td>{{partner.names}}</td>
+                  <td>{{partner.username}}</td>
+                </tr>
+              </tbody>
+            </table>
           </v-card>
-        </v-col>
-      </v-row>
+
+        </v-flex>
+    </v-layout>
     </v-container>
   </div>
 </template>
@@ -62,4 +71,25 @@ export default {
 </script>
 
 <style scoped>
+.imagen {
+    background-image:url("../assets/fondo.jpg");
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    min-height: 100vh;
+    min-width: 100vh;
+}
+.data{
+  width: 100%;
+}
+
+.data th{
+    padding-right: 50px;
+    font-size: 18px;
+}
+
+.data td {
+    padding-right: 35px;
+    padding-bottom: 5px;
+    text-align: center;
+}
 </style>

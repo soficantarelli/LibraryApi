@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="imagen">
     <v-container grid-list-md mb-10>
       <NavBarUser></NavBarUser>
     </v-container>
@@ -8,26 +8,41 @@
       <v-row align="center" justify="center">
         <v-col cols="12" sm="8" md="4">
           <v-card class="elevation-12">
-            <v-toolbar color="dark green" dark flat>
-              <v-toolbar-title>Create Loan</v-toolbar-title>
+            <v-toolbar color="#b51100" dark flat>
+              <v-toolbar-title>New Loan</v-toolbar-title>
             </v-toolbar>
 
             <v-card-text>
-              <v-form v-model="valid" @submit="postLoan" ref="form">
-                <v-select :items="items" name="idBook" label="Book" required></v-select>
+              <v-form v-model="valid" ref="form">
+               <v-text-field 
+                    label="Title" 
+                    name="title" 
+                    :value="title" 
+                    v-model="title" 
+                    disabled 
+                />
+
+                <v-text-field
+                    label="Author"
+                    name="author"
+                    v-model="author"
+                    :value="author"
+                    disabled
+                />
+
 
                 <v-text-field
                   label="Days"
                   name="days"
-                  v-model="number"
+                  v-model="days"
                   required
                   :rules="[v => v > 0 && v < 11 || '1 to 10 days last the loans']"
                 />
                 <v-spacer />
 
-                <v-btn rounded color="info" type="submit" :disabled="!valid" block>Create</v-btn>
+                <v-btn rounded color="success" type="submit" :disabled="!valid" block @click="postLoan">Save</v-btn>
 
-                <v-btn rounded color="dark red" type="submit" block to="/homeuser">Cancel</v-btn>
+                <v-btn rounded color="error" type="submit" block to="/homeuser">Cancel</v-btn>
               </v-form>
             </v-card-text>
             <v-card-actions></v-card-actions>
@@ -44,39 +59,52 @@ export default {
   data: () => ({
     valid: false,
     days: 0,
-    idBook: 0,
-    idUser: this.$store.state.idUser
+    title: "",
+    author: ""
   }),
-  created() {
-    this.initialize();
+  
+  mounted() {
+    this.$axios
+      .get("http://localhost:5555/books/" + this.$route.params.bookId)
+      .then(response => {
+        this.title = response.data[0].title;
+        this.author = response.data[0].author;
+      })
+      .catch(error => {
+        if (error.response.status == 400) {
+          this.$store.commit("logout");
+          this.message = "Session expired".then(() => this.$router.push("/"));
+        } else if (error.response.status == 404) {
+          this.$router.push("/books");
+        }
+      });
   },
+
   methods: {
-    postLoan() {
+    postLoan(e) {
+      e.preventDefault();
       this.$axios
         .post("http://localhost:5555/loans", {
-          idUser: this.idUser,
-          idBook: this.idBook,
-          days: this.days
+          idUser: this.$store.state.idUser,
+          idBook: this.$route.params.bookId,
+          days: parseInt(this.days)
         })
         .then(data => {
           if (res.status == 200) {
             this.message="Loan successfully created"
-						this.$router.push("/homeuser");
+						this.$router.push("/userbooks");
 					} 
         })
         .catch(e => {
-          if (error.response.status == 400) {
+         if (error.response.status == 400) {
             this.$store.commit("logout");
-            this.message = "Session expired"
-            .then(() => this.$router.push("/"));
-
+            this.message = "Session expired".then(() => this.$router.push("/"));
           } else if (error.response.status == 404) {
             this.message = "Book not found"
             .then(() => this.$router.push("/homeuser"));
-
           } else {
             this.message = "The loan could not be created"
-            .then(() => this.$router.push("/books"));
+            .then(() => this.$router.push("/homeuser"));
           }
         });
     }
@@ -85,4 +113,11 @@ export default {
 </script>
 
 <style scoped>
+.imagen {
+    background-image:url("../assets/fondo.jpg");
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    min-height: 100vh;
+    min-width: 100vh;
+}
 </style>

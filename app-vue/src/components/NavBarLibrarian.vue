@@ -1,6 +1,6 @@
 <template>
     <div id="menu">
-        <v-toolbar dark color="grey">
+        <v-toolbar dark color="#8f3e00">
           <v-tabs color="white">
               <v-tab to="homelibrarian">
                   Home
