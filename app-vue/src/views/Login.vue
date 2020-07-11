@@ -1,6 +1,5 @@
 <template>
-	<v-app id="imagen">
-    <v-content>
+	<div class="imagen">
       <v-container grid-list-md>
           <NavBar></NavBar>      
       </v-container>
@@ -8,7 +7,7 @@
         <v-row align="center" justify="center">
           <v-col cols="12" sm="8" md="4">
             <v-card class="elevation-12">
-              <v-toolbar color="dark blue" dark flat>
+              <v-toolbar color="#b51100" dark flat>
                 <v-toolbar-title>Login</v-toolbar-title>
               </v-toolbar>
 
@@ -54,8 +53,7 @@
           </v-col>
         </v-row>
       </v-container>
-    </v-content>
-  </v-app>
+  </div>
 </template>
 
 <script>
@@ -78,6 +76,7 @@
         })
         .then(response => {
           const idUser = response.data.idUser;
+          console.log(idUser);
           const rol = response.data.rol;
           
           this.$store.commit("login", {
@@ -109,5 +108,11 @@
 </script>
 
 <style scoped>
-
+.imagen {
+    background-image:url("../assets/fondo.jpg");
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    min-height: 100vh;
+    min-width: 100vh;
+}
 </style>

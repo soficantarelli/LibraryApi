@@ -42,35 +42,36 @@ module.exports = {
     },
 
     getLoansUser: (id) => {
-        const result = query(`SELECT l.dueDate, p.username 
+        const result = query(`SELECT l.id, l.dueDate, p.username, b.title, b.author 
                                 FROM books b
                                     JOIN loans l
                                         ON b.id = l.idBook
                                     JOIN partners p
                                         ON l.idPartner = p.id
-                                WHERE b.id = ?`, [id]);
-        if(result.length > 0 ) {
-            return result;
-        }else{
-            return -1;
-        }
+                                WHERE p.id = ?
+                                ORDER BY l.dueDate DESC`, [id]);
+        console.log(result);
+                                return result;
     },
 
     /*****************BOOKS****************/
     
     getBooks: () => {
 
-        const result = query(`SELECT * 
-                                FROM books`);
+        const result = query(`SELECT b.id, b.title, b.author, b.amount, (b.     amount - COUNT(l.idBook)) as availables
+                                FROM books b
+                                LEFT JOIN loans l
+                                    ON b.id = l.idBook
+                            GROUP BY b.id, b.title, b.amount
+                            ORDER BY b.title`);
         return result;
     },
     
     findBookId: (id) => {
 
-        const result = query(`SELECT * 
-                                FROM books
-                                WHERE id = ?`, [id]);
-        
+        const result = query(`select * 
+                                from books
+                                where id = ?`, [id]);
         return result;
     },
 
@@ -79,11 +80,7 @@ module.exports = {
         const result = query(`SELECT * 
                                 FROM books
                                 WHERE title = ? and author = ?`, [title, author]);
-        if(result.length > 0 ) {
-            return result;
-        }else{
-            return -1;
-        }
+        return result;
     },
 
     postBook: (title, author, amount) => {
@@ -94,21 +91,30 @@ module.exports = {
         return result;
     },
 
+    getBooksBorrowed: () => {
+
+        const result = query(`SELECT b.id, b.title, b.author, b.amount, b.amount - count(l.idBook) as availables
+                                FROM books b
+                                LEFT JOIN loans l
+                                    ON b.id = l.idBook
+                            GROUP BY b.id, b.title, b.amount
+                            ORDER BY b.title`);
+
+                                
+        return result;
+    },
+
     amountOfCopiesBorrowed: (id) => {
 
-        const result = query(`SELECT b.amount-COUNT(l.idBook) as Available
-                                FROM loans l
-                                    JOIN books b
-                                        on l.idBook = b.id
-                                WHERE l.idBook = ?
-                                GROUP BY l.idBook, b.id, b.amount`, [id]);
-    
+        const result = query(`SELECT COUNT(*) AS borrowed
+                                FROM loans
+                                WHERE idBook = ?`, [id]);
         return result;
     },
 
     amountOfCopies: (id) => {
 
-        const result = query(`SELECT amount as Available
+        const result = query(`SELECT amount
                                 FROM books 
                                 WHERE id = ?`, [id]);
         
@@ -120,14 +126,15 @@ module.exports = {
         const result = query(`UPDATE books 
                                 SET amount = ?
                                 WHERE id = ?`, [cantidadNueva, idLibro]);
+        
         return result;
     },
 
     deleteBook: (id) => {
-
         const result = query(`DELETE 
                                 FROM books
                                 WHERE id = ?`, [id]);
+
         return result;
     },
 
@@ -141,27 +148,24 @@ module.exports = {
 
     getLoans: () => {
 
-        const result = query(`SELECT * 
-                                FROM loans`);
+        const result = query(`SELECT l.id, l.dueDate, b.title, b.author, p.username 
+                                FROM loans l
+                                    JOIN books b
+                                        ON l.idBook = b.id 
+                                    JOIN partners p
+                                        ON l.idPartner = p.id`);
         return result;
     },
     
     dueDateLoan: (idPartner) => {
 
-        const debt = query(`SELECT dueDate
+        const result = query(`SELECT dueDate
                                 FROM loans
                                 WHERE idPartner = ? and dueDate < ?
                                 ORDER BY dueDate desc
                                 limit 1`, [idPartner, Date.now()]);
-
-        if(debt.length > 0){
-                
-            return true;
-
-        }else{
-
-            return false;
-        }
+     
+        return result;
     },
 
     postLoan: (idPartner, idBook, daysBorrowed) => {
@@ -178,11 +182,7 @@ module.exports = {
         const result = query(`DELETE 
                                 FROM loans
                                 WHERE id = ?`, [id]);
-        if(result.length <= 0 ) {
-            return -1;
-        }else{
             return result;
-        }
     }
 }
 

@@ -14,7 +14,7 @@ export default new Vuex.Store({
     mutations: {
         login (state,user){
             state.loggedIn = true;
-            state.idUser = user.idUser;
+            state.idUser = user.idUser; 
             state.rol = user.rol;
         },
         logout (state){

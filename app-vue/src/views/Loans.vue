@@ -1,60 +1,50 @@
 <template>
-<div>    
+  <div class="imagen">
     <v-container grid-list-md mb-10>
-        <NavBarLibrarian></NavBarLibrarian>
+      <NavBarLibrarian></NavBarLibrarian>
     </v-container>
 
-    <v-container grid-list-md mt-10>
+    <v-container>
+      <v-layout>
+        <v-flex xs20 sm8 offset-sm2>
+          <v-card>
+            <v-toolbar color="#b51100">
+              <v-toolbar-title color="white">Loans</v-toolbar-title>
+            </v-toolbar>
 
-        <v-toolbar flat color="white">
-        <v-toolbar-title>Loans</v-toolbar-title>
-        <v-divider
-          class="mx-2"
-          inset
-          vertical
-        ></v-divider>
-      </v-toolbar>
+            <table class="data">
+              <thead>
+                <tr>
+                  <th>Username</th>
+                  <th>Book</th>
+                  <th></th>
+                  <th>Due Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(loan,index) in loans" :key="index">
+                  <td>{{loan.username}}</td>
+                  <td>{{loan.title}}</td>
+                  <td>{{loan.author}}</td>
+                  <td v-if="loan.dueDate < Date.now()" class="red-text">{{ formatDate(loan.dueDate) }}</td>
+                  <td v-if="loan.dueDate > Date.now()">{{ formatDate(loan.dueDate) }}</td>
+                  <td v-else>{{ loan.dueDate }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </v-card>
 
-      <v-data-table
-        :headers="headers"
-        :items="loans"
-        hide-actions
-        class="elevation-1"
-      >
-        <template slot="items" slot-scope="props">
-            
-          <td>{{ props.item.book }}</td>
-          <td class="text-xs">{{ props.item.user }}</td>
-          <td class="text-xs">{{ props.item.expired }}</td>
-        </template>
-               <template v-slot:item.action="{ item }">
-          <v-icon small @click="deleteItem(item)">delete</v-icon>
-        </template>
-      </v-data-table>
+        </v-flex>
+    </v-layout>
     </v-container>
-
-
-</div>
+  </div>
 </template>
 
 <script>
 export default {
     data: () => ({
-    dialog: false,
-    headers: [
-      { text: "Partner", value: "partner" },
-      {text: "Book",value: "book"},
-      { text: "Expired Date", value: "expired" },
-      { text: "Actions", value: "action"}
-    ],
     loans: []
   }),
-
-  watch: {
-    dialog(val) {
-      val || this.close();
-    }
-  },
 
   created() {
     this.getAllLoans();
@@ -65,51 +55,58 @@ export default {
       this.$axios
         .get("http://localhost:5555/loans")
         .then(response => {
-          if (response.status == 200) {
-              this.loans = response.data;
-          }
+          response.data.forEach(loan => {
+            this.loans.push(loan);
+          });
+          if (this.loans.length == 0) {
+            this.loans.push({
+              username: "Not Found Loans",
+              dueDate: ""
+            });
+          } 
         })
         .catch(error => {
           if (error.response.status == 400) {
             this.$store.commit("logout");
             this.message = "Session expired".then(() => this.$router.push("/"));
           }
-          else if(error.response.status == 404){
-              this.message="Loans not found"
-          }
         });
-    },
-
-    deleteLoan(idLoan){
-      this.$axios
-        .delete("http://localhost:5555/loans/" + idLoan)
-        .then(response => {
-          if (response.status == 200) {
-            this.message = "Loan successfully removed"
-            this.getAllBooks();
-          }
-          
-        })
-        .catch(error => {
-          if (error.response.status == 400) {
-            this.$store.commit("logout");
-            this.message = "Session expired"
-            .then(() => this.$router.push("/"));
-          } else if (error.response.status == 404) {
-            this.message = "Loan not found"
-            .then(() => this.$router.push("/loans"));
-          }
-        });
-    },
-
-    deleteItem(item) {
-      confirm("Are you sure you want to delete this item?") &&
-        this.deleteLoan(item.idLoan);
-    }
+    },    
+    formatDate(millsec) {
+			function pad(s) {
+				return s < 10 ? "0" + s : s;
+			}
+			var d = new Date(millsec);
+			return [
+				pad(d.getDate()),
+				pad(d.getMonth() + 1),
+				d.getFullYear()
+			].join("/");
+        }
   }
 }
 </script>
 
 <style scoped>
+.imagen {
+    background-image:url("../assets/fondo.jpg");
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    min-height: 100vh;
+    min-width: 100vh;
+}
+.data{
+  width: 100%;
+}
 
+.data th{
+    padding-right: 50px;
+    font-size: 18px;
+}
+
+.data td {
+    padding-right: 35px;
+    padding-bottom: 5px;
+    text-align: center;
+}
 </style>

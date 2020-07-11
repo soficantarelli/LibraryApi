@@ -84,15 +84,7 @@ module.exports = {
         if (req.session.loggedIn) {
 
             var result = await query.getLoansUser(req.params.id);
-
-            if (result != -1) {
-                res.status(200).json({
-                    data: result
-                });
-
-            } else {
-                res.status(401).json("The user has no loans or not exist");
-            }
+            res.status(200).json(result);
 
         } else {
             res.status(400).json("You must be logged in");
@@ -105,9 +97,9 @@ module.exports = {
 
         if (req.session.loggedIn) {
             var result = await query.getBooks();
-            res.status(200).json({
-                data: result
-            });
+            console.log(result[0].amount);
+            console.log(result[0].availables);
+            res.status(200).json(result);
         } else {
             res.status(400).json("You must be logged in");
         }
@@ -120,21 +112,7 @@ module.exports = {
             var existId = await query.findBookId(id);
 
             if (existId.length > 0) {
-
-                var existLoan = await query.existLoan(id);
-
-                if (existLoan == -1) {
-                    var amount = await query.amountOfCopies(id);
-                    res.status(200).json({
-                        data: amount
-                    });
-                } else {
-                    var amountAvailable = await query.amountOfCopiesBorrowed(id);
-                    res.status(200).json({
-                        data: amountAvailable
-                    });
-                }
-
+                res.status(200).json(existId);
             } else {
                 res.status(404).json("Book not found");
             }
@@ -150,15 +128,14 @@ module.exports = {
 
                 var result = await query.existBook(req.body.title, req.body.author);
 
-                if (result) {
+                if (result.length > 0) {
+                    res.status(401).json("Existing book");
 
+                } else {
                     await query.postBook(req.body.title, req.body.author, req.body.amount);
                     res.status(201).json({
                         message: "Book successfully added"
                     });
-
-                } else {
-                    res.status(401).json("Existing book");
                 }
             } else {
                 res.status(401).json("Wrong parameters");
@@ -172,50 +149,24 @@ module.exports = {
     putBook: async (req, res) => {
         if (req.session.loggedIn && req.session.rol == 'L') {
 
-            var existId = await query.findBookId(req.params.id);
+            var bookId = req.params.id;
+            var existId = await query.findBookId(bookId);
 
-            if (existId) {
+            if (existId.length > 0) {
 
                 var newAmount = req.body.amount;
+                var borrowedAmount = await query.amountOfCopiesBorrowed(bookId);
 
-                var existLoan = await query.existLoan(req.params.id);
+                if (validator.modifiedBook(newAmount, borrowedAmount[0].borrowed)) {
 
-                console.log(existLoan.length > 0);
-
-                if (existLoan.length > 0) {
-
-                    var amountAvailable = await query.amountOfCopies(req.params.id);
-                    if (validator.modifiedBook(newAmount, amountAvailable[0].Available)) {
-
-                        if (await query.putLibro(newAmount, req.params.id)) {
-                            res.status(200).json({
-                                message: "Amount successfully modified"
-                            });
-
-                        } else {
-                            res.status(401).json("Amount could not be modified");
-                        }
-
-                    } else {
-                        res.status(401).json("Wrong parameters");
-                    }
+                    await query.putLibro(newAmount, bookId);
+                    res.status(200).json({
+                        idBook: bookId,
+                        message: "Amount successfully modified"
+                    });
 
                 } else {
-                    var amountAvailable = await query.amountOfCopiesBorrowed(req.params.id);
-                    if (validator.modifiedBook(newAmount, amountAvailable)) {
-
-                        if (await query.putLibro(newAmount, req.params.id)) {
-                            res.status(200).json({
-                                message: "Amount successfully modified"
-                            });
-
-                        } else {
-                            res.status(401).json("Amount could not be modified");
-                        }
-
-                    } else {
-                        res.status(401).json("Wrong parameters");
-                    }
+                    res.status(401).json("Amount could not be modified");
                 }
 
             } else {
@@ -228,23 +179,26 @@ module.exports = {
     },
 
     deleteBook: async (req, res) => {
-
         if (req.session.loggedIn && req.session.rol == 'L') {
 
-            var existId = await query.findBookId(req.params.id);
+            var bookId = req.params.id;
+            var existId = await query.findBookId(bookId);
 
-            if (existId) {
+            if (existId.length > 0) {
 
-                var result = await query.deleteBook(existId);
-                if (!esult) {
+                var borrowedAmount = await query.amountOfCopiesBorrowed(bookId);
+
+                if (borrowedAmount[0].borrowed == 0) {
+                    await query.deleteBook(req.params.id);
 
                     res.status(200).json({
-                        message: `Book ${existId} successfully removed`
+                        idBook: req.params.id,
+                        message: `Book successfully removed`
                     });
-
                 } else {
-                    res.status(401).json("Book couldn't be removed");
+                    res.status(401).json("Book could be delete");
                 }
+
 
             } else {
                 res.status(404).json("Book not found");
@@ -262,13 +216,7 @@ module.exports = {
     getAllLoans: async (req, res) => {
         if (req.session.loggedIn && req.session.rol == 'L') {
             var result = await query.getLoans();
-            if (result.length > 0) {
-                res.status(200).json({
-                    data: result
-                });
-            } else {
-                res.status(404).json("Loans not found");
-            }
+            res.status(200).json(result);
         } else {
             res.status(400).json("You must be logged in and be an admin");
         }
@@ -278,43 +226,46 @@ module.exports = {
         if (req.session.loggedIn && req.session.rol == 'P') {
 
             var idPartner = req.session.idUser;
-            var existId = await query.findBookId(req.body.idBook);
+            console.log(idPartner);
+            var idBook = req.body.idBook;
+            console.log(idBook);
+            var days = req.body.days;
+            console.log(days);
 
-            if (existId) {
+            if (validator.validateDays(days)) {
 
                 var dueDate = await query.dueDateLoan(idPartner);
+                console.log(dueDate);
 
-                if (!dueDate) {
+                if (dueDate.length > 0) {
 
-                    var amountAvailable = await query.amountOfCopies(existId);
-
-                    if (amountAvailable) {
-
-                        if (validator.validateDays(req.body.days)) {
-
-                            var result = await query.postLoan(idPartner, req.body.idBook, req.body.days);
-                            if (result) {
-                                res.status(200).json({
-                                    message: "Loan successfully created"
-                                });
-                            } else {
-                                res.status(401).json("Loan could not be created");
-                            }
-
-                        } else {
-                            res.status(401).json("Wrong number");
-                        }
-
-                    } else {
-                        res.status(401).json("Number of copies not available");
-                    }
-
-                } else {
                     res.status(401).json("Past due loans");
+          
+                } else {
+
+                    var amountAvailable = await query.getBooksBorrowed(idBook);
+                
+                    console.log(amountAvailable[0].availables);
+
+                    if (amountAvailable[0].availables > 0) {
+
+                        console.log("emtre");
+                        await query.postLoan(idPartner, idBook, days);
+                        res.status(200).json({
+                            message: "Loan successfully created"
+                        });
+                        
+                    
+                    } else {
+                    res.status(401).json("Number of copies not available");
+                    }
+                    
                 }
 
-            } else {
-                res.status(404).json("Book not found");
+
+            }
+            else {
+                res.status(401).json("Wrong number");
             }
 
         } else {
@@ -323,19 +274,13 @@ module.exports = {
     },
 
     deleteLoan: async (req, res) => {
-        if (req.session.loggedIn && req.session.rol == 'L') {
-
-            var result = await query.deleteLoan(req.params.id);
-
-            if (result == -1) {
-                res.status(404).json("Loan not found");
-
-            }
-            else {
+        if (req.session.loggedIn) {
+            console.log(req.params.id);
+            await query.deleteLoan(req.params.id);
                 res.status(200).json({
+                    id: req.params.id,
                     message: "Loan successfully deleted"
                 });
-            }
 
         } else {
             res.status(400).json("You must be logged in");

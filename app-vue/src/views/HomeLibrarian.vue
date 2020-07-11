@@ -1,45 +1,43 @@
 <template>
-<div>    
-    <v-container grid-list-md>
-          <NavBarLibrarian></NavBarLibrarian>
-      </v-container>
+  <div class="imagen">
+  <v-container grid-list-md mb-10>
+      <NavBarLibrarian></NavBarLibrarian>
+    </v-container>
 
-       <v-container grid-list-md mt-10>
-            
+    <v-container>
+      <v-layout>
+        <v-flex xs20 sm8 offset-sm2>
+          <v-card>
+            <v-toolbar color="#b51100">
+              <v-toolbar-title color="white">Users</v-toolbar-title>
+            </v-toolbar>
 
-         <v-toolbar flat color="white">
-        <v-toolbar-title>Partners</v-toolbar-title>
-        <v-divider
-          class="mx-2"
-          inset
-          vertical
-        ></v-divider>
-      </v-toolbar>
-      <v-data-table
-        :headers="headers"
-        :items="partners"
-        class="elevation-1"
-      >
-        <template slot="items" slot-scope="props">
-          <td>{{ props.item.partners }}</td>
-          <td class="justify-center layout px-0">
-          </td>
-        </template>
-      </v-data-table>
-       
-        </v-container>
+            <table class="data">
+              <thead>
+                <tr>
+                  <th>Nombre Apellido</th>
+                  <th>Username</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(partner,index) in partners" :key="index">
+                  <td>{{partner.names}}</td>
+                  <td>{{partner.username}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </v-card>
 
-</div>
+        </v-flex>
+    </v-layout>
+    </v-container>
+  </div>
 </template>
 
 <script>
 export default {
-    data: () => ({
-    headers: [
-      {
-        text: "Partners",value: "partners"
-      }],
-    partners:[],
+  data: () => ({
+    partners: []
   }),
 
   created() {
@@ -48,15 +46,17 @@ export default {
 
   methods: {
     getAllPartners() {
+      this.partners = [];
       this.$axios
         .get("http://localhost:5555/partners")
         .then(response => {
-          if (response.status == 200) {
-            if (response.data.length == 0) {
-              this.partners = "No partners availables";
-            } else {
-              this.partners = response.data;
-            }
+          response.data.forEach(partner => {
+            this.partners.push(partner);
+          });
+          if (this.partners.length == 0) {
+            this.partners.push({
+              partner: "Not Found partners"
+            });
           }
         })
         .catch(error => {
@@ -67,9 +67,29 @@ export default {
         });
     }
   }
-}
+};
 </script>
 
 <style scoped>
+.imagen {
+    background-image:url("../assets/fondo.jpg");
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    min-height: 100vh;
+    min-width: 100vh;
+}
+.data{
+  width: 100%;
+}
 
+.data th{
+    padding-right: 50px;
+    font-size: 18px;
+}
+
+.data td {
+    padding-right: 35px;
+    padding-bottom: 5px;
+    text-align: center;
+}
 </style>

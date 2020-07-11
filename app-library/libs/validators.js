@@ -26,8 +26,7 @@ module.exports = {
     }, 
     
     modifiedBook: (newAmount, amountBorrowed) =>{
-        console.log(amountBorrowed);
-        if(typeof(newAmount)=='number' && newAmount != null && newAmount > amountBorrowed){
+        if(newAmount > amountBorrowed){
             
             return true;
 
