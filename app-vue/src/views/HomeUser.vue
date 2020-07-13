@@ -25,9 +25,10 @@
                 <tr v-for="(loan,index) in loans" :key="index">
                   <td>{{loan.title}}</td>
                   <td>{{loan.author}}</td>
-                  <td v-if="loan.dueDate < Date.now()" class="red-text">{{ formatDate(loan.dueDate) }}</td>
-                  <td v-if="loan.dueDate > Date.now()">{{ formatDate(loan.dueDate) }}</td>
-                  <td v-else>{{ loan.dueDate }}</td>
+                  <td v-if="loan.dueDate < Date.now()" ><div class="expired">{{ formatDate(loan.dueDate) }}</div>
+                   </td>
+                  <td v-else>
+                     {{ formatDate(loan.dueDate) }}
                   <td>
                     <v-btn color="error" dark class="btn-sm" @click="returnItem(loan.id)">Return</v-btn>
                   </td>
@@ -148,5 +149,9 @@ export default {
     padding-right: 35px;
     padding-bottom: 5px;
     text-align: center;
+}
+
+.expired{
+  color: red;
 }
 </style>

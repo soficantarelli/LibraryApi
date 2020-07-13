@@ -97,8 +97,6 @@ module.exports = {
 
         if (req.session.loggedIn) {
             var result = await query.getBooks();
-            console.log(result[0].amount);
-            console.log(result[0].availables);
             res.status(200).json(result);
         } else {
             res.status(400).json("You must be logged in");
@@ -226,16 +224,15 @@ module.exports = {
         if (req.session.loggedIn && req.session.rol == 'P') {
 
             var idPartner = req.session.idUser;
-            console.log(idPartner);
+
             var idBook = req.body.idBook;
-            console.log(idBook);
+
             var days = req.body.days;
-            console.log(days);
+
 
             if (validator.validateDays(days)) {
 
                 var dueDate = await query.dueDateLoan(idPartner);
-                console.log(dueDate);
 
                 if (dueDate.length > 0) {
 
@@ -244,12 +241,9 @@ module.exports = {
                 } else {
 
                     var amountAvailable = await query.getBooksBorrowed(idBook);
-                
-                    console.log(amountAvailable[0].availables);
+            
 
                     if (amountAvailable[0].availables > 0) {
-
-                        console.log("emtre");
                         await query.postLoan(idPartner, idBook, days);
                         res.status(200).json({
                             message: "Loan successfully created"
@@ -275,7 +269,7 @@ module.exports = {
 
     deleteLoan: async (req, res) => {
         if (req.session.loggedIn) {
-            console.log(req.params.id);
+
             await query.deleteLoan(req.params.id);
                 res.status(200).json({
                     id: req.params.id,
