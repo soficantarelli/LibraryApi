@@ -1,10 +1,15 @@
 <template>
   <div class="imagen">
-      <v-container grid-list-md mb-10>
-          <NavBarLibrarian></NavBarLibrarian>
-      </v-container>
+    <v-container grid-list-md mb-10>
+      <NavBarLibrarian></NavBarLibrarian>
+    </v-container>
 
     <v-container grid-list-md mt-10>
+      <v-snackbar v-model="snackbar" :timeout="timeout" top :color="color">
+        {{ message }}
+        <v-btn color="white" text @click="snackbar = false">Cerrar</v-btn>
+      </v-snackbar>
+
       <v-row align="center" justify="center">
         <v-col cols="12" sm="8" md="4">
           <v-card class="elevation-12">
@@ -38,7 +43,14 @@
                 />
                 <v-spacer />
 
-                <v-btn rounded color="success" type="submit" :disabled="!valid" block @click="postBook">Save</v-btn>
+                <v-btn
+                  rounded
+                  color="success"
+                  type="submit"
+                  :disabled="!valid"
+                  block
+                  @click="postBook"
+                >Save</v-btn>
 
                 <v-btn rounded color="error" type="submit" block to="/books">Cancel</v-btn>
               </v-form>
@@ -56,6 +68,10 @@ export default {
   name: "createbooks",
   data: () => ({
     valid: false,
+    message: "",
+    color: "error",
+    snackbar: false,
+    timeout: 2000,
     title: "",
     author: "",
     amount: ""
@@ -64,27 +80,26 @@ export default {
   methods: {
     postBook(e) {
       e.preventDefault();
-      this.$axios.post("http://localhost:5555/books", {
-        title: this.title,
-        author: this.author,
-        amount: this.amount
-      })
-      .then(response => {			
-					if (response.status == 201) {
-						this.$router.push("/books");
+      this.$axios
+        .post("http://localhost:5555/books", {
+          title: this.title,
+          author: this.author,
+          amount: this.amount
+        })
+        .then(response => {
+          if (response.status == 201) {
+            this.$router.push("/books");
           }
-      })
-      .catch(error => {
+        })
+        .catch(error => {
           if (error.response && error.response.status == 400) {
             this.$store.commit("logout");
-            this.message = "Session expired"
-            .then(() => this.$router.push("/"));
-
+            this.message = "Session expired".then(() => this.$router.push("/"));
           } else if (error.response && error.response.status == 401) {
-            this.message = "Existing book or Wrong parameters"
-            .then(() => this.$router.push("/books"));  
-          }  
-        })
+            this.snackbar = true;
+            this.message = "Existing book";
+          }
+        });
     }
   }
 };
@@ -92,10 +107,10 @@ export default {
 
 <style scoped>
 .imagen {
-    background-image:url("../assets/fondo.jpg");
-    background-size: 100% 100%;
-    background-attachment: fixed;
-    min-height: 100vh;
-    min-width: 100vh;
+  background-image: url("../assets/fondo.jpg");
+  background-size: 100% 100%;
+  background-attachment: fixed;
+  min-height: 100vh;
+  min-width: 100vh;
 }
 </style>

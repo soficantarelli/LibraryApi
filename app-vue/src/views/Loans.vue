@@ -26,9 +26,10 @@
                   <td>{{loan.username}}</td>
                   <td>{{loan.title}}</td>
                   <td>{{loan.author}}</td>
-                  <td v-if="loan.dueDate < Date.now()" class="red-text">{{ formatDate(loan.dueDate) }}</td>
-                  <td v-if="loan.dueDate > Date.now()">{{ formatDate(loan.dueDate) }}</td>
-                  <td v-else>{{ loan.dueDate }}</td>
+                  <td v-if="loan.dueDate < Date.now()" ><div class="expired">{{ formatDate(loan.dueDate) }}</div>
+                   </td>
+                  <td v-else>
+                     {{ formatDate(loan.dueDate) }} </td>
                 </tr>
               </tbody>
             </table>
@@ -76,13 +77,17 @@ export default {
 			function pad(s) {
 				return s < 10 ? "0" + s : s;
 			}
-			var d = new Date(millsec);
+		if(millsec == "Loans"){
+          return millsec;
+      }else{
+        var d = new Date(millsec);
 			return [
 				pad(d.getDate()),
 				pad(d.getMonth() + 1),
 				d.getFullYear()
 			].join("/");
-        }
+      }
+    }
   }
 }
 </script>
@@ -108,5 +113,9 @@ export default {
     padding-right: 35px;
     padding-bottom: 5px;
     text-align: center;
+}
+
+.expired{
+  color: red;
 }
 </style>

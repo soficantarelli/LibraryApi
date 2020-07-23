@@ -50,7 +50,6 @@ module.exports = {
                                         ON l.idPartner = p.id
                                 WHERE p.id = ?
                                 ORDER BY l.dueDate DESC`, [id]);
-        console.log(result);
                                 return result;
     },
 

@@ -28,8 +28,9 @@
                   <td v-if="loan.dueDate < Date.now()" ><div class="expired">{{ formatDate(loan.dueDate) }}</div>
                    </td>
                   <td v-else>
-                     {{ formatDate(loan.dueDate) }}
-                  <td>
+                     {{ formatDate(loan.dueDate) }} </td>
+                  <td v-if="loan.dueDate == 'Loans' "> </td>
+                  <td v-else>
                     <v-btn color="error" dark class="btn-sm" @click="returnItem(loan.id)">Return</v-btn>
                   </td>
                 </tr>
@@ -115,14 +116,20 @@ export default {
     formatDate(millsec) {
 			function pad(s) {
 				return s < 10 ? "0" + s : s;
-			}
-			var d = new Date(millsec);
+      }
+      
+      if(millsec == "Loans"){
+          return millsec;
+      }else{
+        var d = new Date(millsec);
 			return [
 				pad(d.getDate()),
 				pad(d.getMonth() + 1),
 				d.getFullYear()
 			].join("/");
-        }
+      }
+			
+    }
   }
 };
 </script>

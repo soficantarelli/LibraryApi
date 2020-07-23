@@ -5,6 +5,11 @@
     </v-container>
 
     <v-container>
+            <v-snackbar v-model="snackbar" :timeout="timeout" top :color="color">
+        {{ message }}
+        <v-btn color="white" text @click="snackbar = false">Cerrar</v-btn>
+      </v-snackbar>
+
       <v-layout>
         <v-flex xs20 sm8 offset-sm2>
           <v-card>
@@ -55,16 +60,12 @@
 export default {
   name: "books",
   data: () => ({
-    dialog: "",
-    message: "",
+        message: "",
+    color: "error",
+    snackbar: false,
+    timeout: 2000,
     books: []
   }),
-
-  watch: {
-    dialog(val) {
-      val || this.close();
-    }
-  },
 
   mounted() {
     this.getAllBooks();
@@ -96,19 +97,19 @@ export default {
       this.$axios
         .delete("http://localhost:5555/books/" + idBook)
         .then(response => {
-          // if (response.status == 200) {
           this.message = "Book successfully removed";
           this.refreshBooks();
-          // }
         })
         .catch(error => {
           if (error.response.status == 400) {
             this.$store.commit("logout");
             this.message = "Session expired".then(() => this.$router.push("/"));
-          } else {
-            this.message = "Book not found".then(() =>
-              this.$router.push("/books")
-            );
+          } else if (error.response.status == 401){
+              this.snackbar = true;
+              this.message = "Couldnt be removed";
+          }else{
+            this.snackbar = true;
+            this.message = "Book not found";
           }
         });
     },
